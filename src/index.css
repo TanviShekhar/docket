@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light dark; --bg: #ffffff; --text: #101828; --line: #e4e7ee; --muted: #667085; --bar: #0b1f4b; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0a1430; --text: #e8ecf6; --line: #22305a; --muted: #9aa6c4; --bar: #5b7bd5; }
+  /* Status colours lightened so text stays above 4.5:1 on the dark page. */
+  .text-ok { color: #5eead4; }
+  .text-gap { color: #ff7aa8; }
+  .text-warn { color: #f5b34d; }
+  .text-locked { color: #a3aed0; }
+  /* Navy buttons would vanish into a dark page, so they get a lighter blue. The top bar stays deep navy. */
+  button.bg-navy, a.bg-navy { background-color: #1e3f9a; }
+  .border-navy { border-color: #8fa3e0; }
+}
+html, body { background: var(--bg); color: var(--text); }
+body { font-family: "Red Hat Text", sans-serif; font-size: 16px; margin: 0; }
+h1, h2, h3 { font-family: "Red Hat Display", sans-serif; font-weight: 700; }
+input, textarea, select { color: inherit; }
+.num { font-variant-numeric: tabular-nums; }
+td.num, th.num { white-space: nowrap; } /* rupee amounts in tables never wrap */
+.bg-bar { background-color: var(--bar); }
+:focus-visible { outline: 2px solid #d4145a; outline-offset: 2px; }
+@media (prefers-color-scheme: dark) { :focus-visible { outline-color: #ff7aa8; } }
