@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { DEMO_TODAY, PEOPLE, type Role } from "../lib/data";
 import { D } from "../lib/engine";
 import { useStore } from "../lib/store";
@@ -20,15 +20,25 @@ const todayLabel = D(DEMO_TODAY).toLocaleDateString("en-GB", { weekday: "short",
 export default function TopBar() {
   const { role, setRole, reset, signOut } = useStore();
   const [confirming, setConfirming] = useState(false);
+  const ref = useRef<HTMLElement>(null);
+  // The bar stays visible while scrolling on tablets and laptops. Its height is shared so sticky side panels sit below it.
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const set = () => document.documentElement.style.setProperty("--hdr", matchMedia("(min-width: 768px)").matches ? `${el.getBoundingClientRect().height}px` : "0px");
+    set();
+    const ro = new ResizeObserver(set); ro.observe(el);
+    window.addEventListener("resize", set);
+    return () => { ro.disconnect(); window.removeEventListener("resize", set); document.documentElement.style.setProperty("--hdr", "0px"); };
+  }, []);
   const btn = "min-h-[44px] lg:min-h-[36px] px-2.5 rounded-lg text-sm hover:bg-white/10";
   // Leaving a running tour by clicking a tab asks first.
   const guard = (to: string) => (e: React.MouseEvent) => {
     if (useTour.getState().chapter !== null) { e.preventDefault(); useTour.setState({ leaving: to }); }
   };
   return (
-    <header className="bg-navy text-white">
+    <header ref={ref} className="bg-navy text-white md:sticky md:top-0 z-40">
       <div className="page py-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-        <Logo />
+        <Link to="/" onClick={guard("/")} aria-label="Docket: go to the to-do page" className="rounded-lg"><Logo /></Link>
         <nav className="flex flex-wrap" aria-label="Main">
           {TABS.map((t) => (
             <NavLink key={t.to} to={t.to} end={t.to === "/"} onClick={guard(t.to)}

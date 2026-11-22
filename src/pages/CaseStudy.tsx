@@ -20,7 +20,7 @@ function Table({ head, rows, wrap }: { head: string[]; rows: ReactNode[][]; wrap
     </div>
   );
 }
-const H2 = ({ id, children }: { id: string; children: ReactNode }) => <h2 id={id} className="text-2xl md:text-3xl scroll-mt-16 border-b border-[var(--line)] pb-2">{children}</h2>;
+const H2 = ({ id, children }: { id: string; children: ReactNode }) => <h2 id={id} className="text-2xl md:text-3xl scroll-mt-[calc(var(--hdr)+1rem)] border-b border-[var(--line)] pb-2">{children}</h2>;
 const H3 = ({ children }: { children: ReactNode }) => <h3 className="mt-6 text-lg">{children}</h3>;
 const Src = ({ n }: { n: number }) => <a href="#/case-study?to=sources" className="underline">Source {n}</a>;
 
@@ -46,19 +46,19 @@ export default function CaseStudy() {
 
   return (
     <main className="pb-10">
-      <nav aria-label="Case analysis sections" className="lg:hidden sticky top-0 z-10 bg-[var(--bg)] border-b border-[var(--line)]">
+      <nav aria-label="Case analysis sections" className="lg:hidden sticky top-[var(--hdr)] z-10 bg-[var(--bg)] border-b border-[var(--line)]">
         <ul className="page flex gap-1 overflow-x-auto text-sm">
           {NAV.map(([id, label]) => <li key={id} className="shrink-0"><button type="button" onClick={() => go(id)} className={`min-h-[44px] px-3 ${active === id ? "font-semibold underline" : ""}`}>{label}</button></li>)}
         </ul>
       </nav>
       <div className="page lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
         <aside className="hidden lg:block">
-          <nav aria-label="On this page" className="sticky top-4 mt-8 rounded-xl border border-[var(--line)] bg-[var(--panel)] p-3">
-            <p className="px-2 pb-2 text-xs font-semibold text-[var(--muted)]">On this page</p>
-            <ul className="space-y-0.5">
-              {NAV.map(([id, label]) => (
-                <li key={id}><button type="button" onClick={() => go(id)} aria-current={active === id ? "true" : undefined}
-                  className={`w-full text-left min-h-[36px] px-2 rounded-lg text-sm ${active === id ? "bg-[#1e3f9a] text-white font-semibold" : "hover:bg-[var(--line)]"}`}>{label}</button></li>
+          <nav aria-label="On this page" className="sticky top-[calc(var(--hdr)+1rem)] mt-8 rounded-xl border border-[var(--line)] bg-[var(--panel)] p-3">
+            <p className="px-1 pb-2 text-xs font-semibold text-[var(--muted)]">On this page</p>
+            <ul className="space-y-1.5">
+              {NAV.map(([id, label], i) => (
+                <li key={id} className={i === 5 ? "pt-3" : ""}>{i === 5 && <p className="px-1 pb-1.5 text-xs font-semibold text-[var(--muted)]">Reference</p>}<button type="button" onClick={() => go(id)} aria-current={active === id ? "true" : undefined}
+                  className={`w-full text-left min-h-[38px] px-3 rounded-lg text-sm border ${active === id ? "bg-[#1e3f9a] text-white font-semibold border-[#1e3f9a]" : "bg-[var(--bg)] border-[var(--line)] hover:border-[var(--tour)]"}`}>{label}</button></li>
               ))}
             </ul>
           </nav>

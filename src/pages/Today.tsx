@@ -71,11 +71,11 @@ export default function Today() {
           </section>
         </div>
 
-        <details className="panel lg:sticky lg:top-4" open={wide}>
+        <details className="panel lg:sticky lg:top-[calc(var(--hdr)+1rem)]" open={wide}>
           <summary className="cursor-pointer min-h-[44px] flex items-center text-lg font-semibold">Waiting on others ({others.length})</summary>
           {others.length === 0
             ? <p className="mt-2">Nobody else has open work.</p>
-                      : <ul className="mt-3 space-y-3 lg:max-h-[calc(100vh-9rem)] overflow-y-auto pr-1">{others.map((c) => <TodoCard key={c.id} c={c} viewer={role} />)}</ul>}
+                      : <ul className="mt-3 space-y-3 lg:max-h-[calc(100vh-var(--hdr)-7rem)] overflow-y-auto pr-1">{others.map((c) => <TodoCard key={c.id} c={c} viewer={role} />)}</ul>}
         </details>
       </div>
     </main>

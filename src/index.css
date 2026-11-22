@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light dark; --bg: #ffffff; --text: #101828; --line: #e4e7ee; --muted: #667085; --bar: #0b1f4b; --tour: #1e3f9a; --panel: #f7f8fb; }
+:root { --hdr: 0px; color-scheme: light dark; --bg: #ffffff; --text: #101828; --line: #e4e7ee; --muted: #667085; --bar: #0b1f4b; --tour: #1e3f9a; --panel: #f7f8fb; }
 @media (prefers-color-scheme: dark) {
   :root { --bg: #0a1430; --text: #e8ecf6; --line: #22305a; --muted: #9aa6c4; --bar: #5b7bd5; --tour: #8fa3e0; --panel: #0e1a3d; }
   /* Status colours lightened so text stays above 4.5:1 on the dark page. */
