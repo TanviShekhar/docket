@@ -2,18 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { --hdr: 0px; color-scheme: light dark; --bg: #ffffff; --text: #101828; --line: #e4e7ee; --muted: #667085; --bar: #0b1f4b; --tour: #1e3f9a; --panel: #f7f8fb; }
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #0a1430; --text: #e8ecf6; --line: #22305a; --muted: #9aa6c4; --bar: #5b7bd5; --tour: #8fa3e0; --panel: #0e1a3d; }
-  /* Status colours lightened so text stays above 4.5:1 on the dark page. */
-  .text-ok { color: #5eead4; }
-  .text-gap { color: #ff7aa8; }
-  .text-warn { color: #f5b34d; }
-  .text-locked { color: #a3aed0; }
-  /* Navy buttons would vanish into a dark page, so they get a lighter blue. The top bar stays deep navy. */
-  button.bg-navy, a.bg-navy { background-color: #1e3f9a; }
-  .border-navy { border-color: #8fa3e0; }
+/* White is the default on every device. Dark is chosen with the sun/moon button (data-theme="dark" on the page). */
+:root { --hdr: 0px; color-scheme: light; --bg: #ffffff; --text: #101828; --line: #e4e7ee; --muted: #667085; --bar: #0b1f4b; --tour: #1e3f9a; --tourbg: #ffffff; --tourtext: #ffffff; --panel: #f7f8fb; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  /* Neutral charcoal, not navy, so panels, buttons and the tour each stand apart. */
+  --bg: #121418; --text: #e9ecf1; --line: #343a47; --muted: #a3abba; --bar: #6f8fe8; --tour: #fbbf24; --tourbg: #2a2416; --tourtext: #1a1200; --panel: #1a1d24;
 }
+/* Status colours lightened so text stays above 4.5:1 on the dark page. */
+:root[data-theme="dark"] .text-ok { color: #5eead4; }
+:root[data-theme="dark"] .text-gap { color: #ff7aa8; }
+:root[data-theme="dark"] .text-warn { color: #f5b34d; }
+:root[data-theme="dark"] .text-locked { color: #a3aed0; }
+/* Navy buttons become a clear blue. The top bar stays deep navy, which now contrasts with the charcoal page. */
+:root[data-theme="dark"] button.bg-navy, :root[data-theme="dark"] a.bg-navy { background-color: #2f5bd8; }
+:root[data-theme="dark"] .border-navy { border-color: #9db4ff; }
+
 html, body { background: var(--bg); color: var(--text); }
 body { font-family: "Red Hat Text", sans-serif; font-size: 16px; margin: 0; }
 h1, h2, h3 { font-family: "Red Hat Display", sans-serif; font-weight: 700; }
@@ -21,8 +25,8 @@ input, textarea, select { color: inherit; }
 .num { font-variant-numeric: tabular-nums; }
 td.num, th.num { white-space: nowrap; } /* rupee amounts in tables never wrap */
 .bg-bar { background-color: var(--bar); }
-:focus-visible { outline: 2px solid #d4145a; outline-offset: 2px; }
-@media (prefers-color-scheme: dark) { :focus-visible { outline-color: #ff7aa8; } }
+:focus-visible { outline: 2px solid var(--tour); outline-offset: 2px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--tour); outline-offset: 0; }
 
 /* Pages use the whole screen, with side padding that grows on wide monitors. */
 .page { width: 100%; max-width: 1760px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
@@ -33,7 +37,7 @@ td.num, th.num { white-space: nowrap; } /* rupee amounts in tables never wrap */
 /* Item pages: one column on phones, two on laptops (what to do on the left, the proof on the right). */
 .item-grid { display: grid; gap: 1.75rem; grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 1024px) {
-  .item-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); column-gap: 2.5rem; row-gap: 1.5rem; align-items: start; }
+  .item-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 8fr); column-gap: 2.5rem; row-gap: 1.5rem; align-items: start; }
   .ig-what { grid-column: 1; grid-row: 1; }
   .ig-action { grid-column: 1; grid-row: 2; }
   .ig-files { grid-column: 1; grid-row: 3; }
@@ -44,20 +48,19 @@ td.num, th.num { white-space: nowrap; } /* rupee amounts in tables never wrap */
 
 /* Assumption chips (A1 to A10) have their own colour so they never look like a status or a money gap. */
 .chip-assume { display: inline-flex; align-items: center; border-radius: 9999px; padding: 0 0.5rem; font-size: 0.75rem; font-weight: 600; background: #fdf0d2; color: #6b3f06; border: 1px solid #e0a63a; }
-@media (prefers-color-scheme: dark) { .chip-assume { background: #4a3410; color: #ffd98a; border-color: #b8892f; } }
+:root[data-theme="dark"] .chip-assume { background: #4a3410; color: #ffd98a; border-color: #b8892f; }
 
 /* Guided tour: the docked guide leaves room on the right of the page on laptops. */
 @media (min-width: 1024px) { .tour-pad { padding-right: 23rem; } }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+.tour-panel { background: var(--tourbg); }
+:root[data-theme="dark"] .tour-panel { border-color: var(--tour); }
 
 .prose-wide p, .prose-wide li { max-width: 100ch; }
 
 /* The golden box marks "the idea" or "the story": the thing to read first. */
 .story-box { background: #fdf0d2; border: 1px solid #e0a63a; color: #3b2a06; border-radius: 14px; }
-@media (prefers-color-scheme: dark) { .story-box { background: #3a2a0c; border-color: #b8892f; color: #ffe7b0; } }
-/* Form fields use the blue focus ring, never the red one, and never spill outside the field. */
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--tour); outline-offset: 0; }
-:focus-visible { outline-color: var(--tour); }
+:root[data-theme="dark"] .story-box { background: #3a2a0c; border-color: #b8892f; color: #ffe7b0; }
 
 /* Small coloured pills: green for confirmed, amber for waiting, blue for yearly. */
 .pill { display: inline-block; border: 1px solid; border-radius: 9999px; padding: 0 0.6rem; font-size: 0.8rem; font-weight: 600; line-height: 1.5rem; }
@@ -66,14 +69,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px
 .pill-yearly { background: #dbeafe; color: #1e3a8a; border-color: #93c5fd; }
 .big-oneoff { color: #15803d; }
 .big-yearly { color: #1d4ed8; }
-@media (prefers-color-scheme: dark) {
-  .pill-ok, .pill-oneoff { background: #0f3d2a; color: #86efac; border-color: #1f7a52; }
-  .pill-wait { background: #43320c; color: #fcd34d; border-color: #8a6a1c; }
-  .pill-yearly { background: #14264f; color: #bfdbfe; border-color: #2f4fa0; }
-  .big-oneoff { color: #5eead4; }
-  .big-yearly { color: #93b4ff; }
-}
-@media (min-width: 1024px) { .item-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 8fr); } }
+:root[data-theme="dark"] .pill-ok, :root[data-theme="dark"] .pill-oneoff { background: #0f3d2a; color: #86efac; border-color: #1f7a52; }
+:root[data-theme="dark"] .pill-wait { background: #43320c; color: #fcd34d; border-color: #8a6a1c; }
+:root[data-theme="dark"] .pill-yearly { background: #14264f; color: #bfdbfe; border-color: #2f4fa0; }
+:root[data-theme="dark"] .big-oneoff { color: #5eead4; }
+:root[data-theme="dark"] .big-yearly { color: #93b4ff; }
 
 /* Honesty labels each have their own colour, so people learn what they mean: green calculated, amber simulated, blue recorded AI. */
 .lbl { display: inline-block; border: 1px solid; border-radius: 9999px; padding: 0 0.55rem; font-size: 0.75rem; font-weight: 600; line-height: 1.4rem; }
@@ -83,11 +83,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px
 .lbl-rules { background: #e2e8f0; color: #1e293b; border-color: #94a3b8; }
 .lbl-template { background: #cffafe; color: #134e4a; border-color: #67e8f9; }
 .lbl-input { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
-@media (prefers-color-scheme: dark) {
-  .lbl-calculated { background: #0f3d2a; color: #86efac; border-color: #1f7a52; }
-  .lbl-simulated { background: #43320c; color: #fcd34d; border-color: #8a6a1c; }
-  .lbl-ai { background: #14264f; color: #bfdbfe; border-color: #2f4fa0; }
-  .lbl-rules { background: #1e293b; color: #cbd5e1; border-color: #475569; }
-  .lbl-template { background: #0c3a3f; color: #a5f3fc; border-color: #1f7a85; }
-  .lbl-input { background: #1e293b; color: #cbd5e1; border-color: #475569; }
-}
+:root[data-theme="dark"] .lbl-calculated { background: #0f3d2a; color: #86efac; border-color: #1f7a52; }
+:root[data-theme="dark"] .lbl-simulated { background: #43320c; color: #fcd34d; border-color: #8a6a1c; }
+:root[data-theme="dark"] .lbl-ai { background: #14264f; color: #bfdbfe; border-color: #2f4fa0; }
+:root[data-theme="dark"] .lbl-rules { background: #262b36; color: #cbd5e1; border-color: #475569; }
+:root[data-theme="dark"] .lbl-template { background: #0c3a3f; color: #a5f3fc; border-color: #1f7a85; }
+:root[data-theme="dark"] .lbl-input { background: #262b36; color: #cbd5e1; border-color: #475569; }

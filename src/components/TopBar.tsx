@@ -6,6 +6,7 @@ import { useStore } from "../lib/store";
 import { useTour } from "../lib/tour";
 import AssumptionChip from "./AssumptionChip";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 const TABS = [
   { to: "/", label: "To-do" },
@@ -58,6 +59,7 @@ export default function TopBar() {
           <button className={`${btn} border border-white/40 px-3`} type="button" onClick={() => useTour.getState().start()}>Take the tour</button>
           <button className={btn} type="button" onClick={() => setConfirming(true)}>Reset demo</button>
           <button className={btn} type="button" onClick={() => { useTour.getState().end(); signOut(); }}>Sign out</button>
+          <ThemeToggle />
         </div>
       </div>
       {confirming && (

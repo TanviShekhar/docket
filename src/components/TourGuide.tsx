@@ -28,7 +28,7 @@ function Ring({ target, n }: { target?: string; n: number }) {
   return (
     <div aria-hidden className="pointer-events-none fixed z-40" style={{ left: box.x - 8, top: box.y - 8, width: box.w + 16, height: box.h + 16 }}>
       <div className="absolute inset-0 rounded-xl" style={{ border: "3px solid var(--tour)" }} />
-      <div className="absolute -left-3 -top-3 w-7 h-7 rounded-full flex items-center justify-center text-sm font-semibold text-white" style={{ background: "#1e3f9a", border: "2px solid #fff" }}>{n}</div>
+      <div className="absolute -left-3 -top-3 w-7 h-7 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: "var(--tour)", color: "var(--tourtext)", border: "2px solid var(--bg)" }}>{n}</div>
     </div>
   );
 }
@@ -88,7 +88,7 @@ export default function TourGuide() {
     <>
       {s && <Ring target={s.target} n={step + 1} key={`${chapter}:${step}`} />}
       <aside role="region" aria-label="Guided tour"
-        className="fixed z-50 bg-[var(--bg)] border-[var(--line)] inset-x-0 bottom-0 max-h-[55vh] border-t overflow-y-auto lg:inset-x-auto lg:right-0 lg:top-0 lg:bottom-0 lg:w-[22rem] lg:max-h-none lg:border-t-0 lg:border-l">
+        className="fixed z-50 tour-panel border-[var(--line)] inset-x-0 bottom-0 max-h-[55vh] border-t overflow-y-auto lg:inset-x-auto lg:right-0 lg:top-0 lg:bottom-0 lg:w-[22rem] lg:max-h-none lg:border-t-0 lg:border-l">
         <div className="p-4 flex flex-col gap-3 min-h-full">
           <div>
             <p className="text-xs text-[var(--muted)]">Guided tour: {ch.name}</p>

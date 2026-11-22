@@ -7,6 +7,7 @@ import { contractRate, invoiceRate } from "../lib/todo";
 import { useStore } from "../lib/store";
 import { useTour } from "../lib/tour";
 import Logo from "../components/Logo";
+import ThemeToggle from "../components/ThemeToggle";
 
 // While true, the app keeps showing this screen after sign-in so the visitor can choose how to start.
 export const usePicking = create<{ picking: boolean }>(() => ({ picking: false }));
@@ -47,7 +48,7 @@ export default function Welcome() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-navy text-white"><div className="page py-3"><Logo size={28} /></div></header>
+      <header className="bg-navy text-white"><div className="page py-3 flex items-center justify-between"><Logo size={28} /><ThemeToggle /></div></header>
       <main className="flex-1 flex items-center">
         <div className="page w-full py-8">
 
