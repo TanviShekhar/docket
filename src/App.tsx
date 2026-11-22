@@ -42,7 +42,7 @@ export default function App() {
       </Routes>
       <footer className="page py-6 text-sm text-[var(--muted)]">
         Docket is a prototype. All companies, people and data are fictional. Demo date Mon 23 Nov 2026.{" "}
-        <a className="underline" href="#/case-study?to=assumptions">See the assumptions</a> <span className="chip-assume">A1 to A10</span>
+        <a className="underline" href="#/case-study?to=assumptions">See the assumptions</a> <span className="chip-assume">A1 to A11</span>
       </footer>
       {touring && <div aria-hidden className="h-[58vh] lg:hidden" />}
       {pickerOpen && <TourGuide />}

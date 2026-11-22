@@ -13,6 +13,7 @@ export const ASSUMPTIONS: { code: string; text: string; why: string; wrong: stri
   { code: "A8", text: "The brief allows AI tools; AI outputs are recorded runs because the site is static", why: "No API key on a static site", wrong: "Live AI can be added on a server later" },
   { code: "A9", text: "Inbox and folder scanning, the Excel tracker and the corporate card feed are simulated; in production, people choose which mailboxes and folders Docket may read", why: "Privacy and IT approval", wrong: "Coverage of shadow contracts depends on what is connected" },
   { code: "A10", text: "The version that counts is the one signed by both parties with a completed e-signature record; otherwise Legal decides", why: "A clear, explainable rule", wrong: "Paper-signed contracts need a manual check" },
+  { code: "A11", text: "Scanned and image-only documents are already read by OCR (text recognition) in an earlier intake pipeline, so Docket receives clean text. The prototype does not do this", why: "OCR is a solved, separate step, and it would add nothing to what this prototype demonstrates", wrong: "A real rollout needs the OCR pipeline first, and low-quality scans need a human check" },
 ];
 
 export const SOURCE_SYSTEMS: [string, string, string][] = [
@@ -24,6 +25,7 @@ export const SOURCE_SYSTEMS: [string, string, string][] = [
   ["Transport management system", "Shipments, on-time flags, delay reasons", "Service credit"],
   ["Supplier master", "Legal entity names, group companies", "Northstar check"],
   ["Excel trackers", "Copies of renewal dates, rates and SLAs kept by teams", "Tracker check"],
+  ["Intake and OCR pipeline (assumed upstream, not built)", "Clean text from scanned and image-only documents", "Contracts"],
   ["Connected inboxes and shared folders (scanning)", "Contract-like files that were never filed", "Found outside Docket, version check"],
   ["Corporate card feed", "Payments made without a PO or invoice", "Coverage"],
   ["Company sign-in", "Roles", "Role switcher"],

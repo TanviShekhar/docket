@@ -89,3 +89,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px
 :root[data-theme="dark"] .lbl-rules { background: #262b36; color: #cbd5e1; border-color: #475569; }
 :root[data-theme="dark"] .lbl-template { background: #0c3a3f; color: #a5f3fc; border-color: #1f7a85; }
 :root[data-theme="dark"] .lbl-input { background: #262b36; color: #cbd5e1; border-color: #475569; }
+
+/* Soft tinted panels for the supplier portal. */
+.tint-green { background: #f0fdf4; border-color: #86efac !important; color: #14532d; }
+.tint-amber { background: #fffbeb; border-color: #fcd34d !important; color: #78350f; }
+.tint-blue { background: #eff6ff; border: 1px solid #93c5fd; color: #1e3a8a; }
+:root[data-theme="dark"] .tint-green { background: #0f2e22; border-color: #1f7a52 !important; color: #bbf7d0; }
+:root[data-theme="dark"] .tint-amber { background: #33270c; border-color: #8a6a1c !important; color: #fde68a; }
+:root[data-theme="dark"] .tint-blue { background: #14223f; border-color: #2f4fa0; color: #dbeafe; }

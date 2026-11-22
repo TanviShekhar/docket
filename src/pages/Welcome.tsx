@@ -75,7 +75,7 @@ export default function Welcome() {
                 <h2 className="text-lg">Before you explore</h2>
                 <p><span className="font-semibold">A prototype for a case.</span> Companies, people and data are fictional. Nothing is sent and no money moves.</p>
                 <p><span className="font-semibold">The Case analysis page is part of the submission</span>, not part of the product. It holds the reasoning behind it.</p>
-                <p>Amber tags like <span className="chip-assume">A7</span> mark an <span className="font-semibold">assumption</span> we made to build this. All ten are on the Case analysis page.</p>
+                <p>Amber tags like <span className="chip-assume">A7</span> mark an <span className="font-semibold">assumption</span> we made to build this. All eleven are on the Case analysis page.</p>
                 <p>Labels like <span className="lbl lbl-calculated">Calculated</span> or <span className="lbl lbl-simulated">Simulated data</span> say where a result came from.</p>
               </aside>
             </div>

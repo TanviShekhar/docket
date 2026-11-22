@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DEMO_TODAY, DOCS, INVOICES, PAID_INVOICE_NUMBERS, PEOPLE, SUPPLIERS } from "../lib/data";
 import { checkInvoice, daysBetween, inr } from "../lib/engine";
 import { CREDIT_NOTE_NO, disputeEmail, facts } from "../lib/caseA";
@@ -8,9 +8,10 @@ import Label from "../components/Label";
 import Logo from "../components/Logo";
 import ThemeToggle from "../components/ThemeToggle";
 import { Primary, Secondary } from "../components/ui";
+import CaseStudy from "./CaseStudy";
 
 const TYPE_NAME: Record<string, string> = { MSA: "Main contract", SOW: "Project order", Amendment: "Change to the contract" };
-const TABS = ["Overview", "Agreements", "Invoices"] as const;
+const TABS = ["Overview", "Agreements", "Invoices", "Case analysis"] as const;
 
 // What a supplier sees: only its own agreements and invoices, as plain facts. No internal checks, amounts at stake or progress.
 export default function SupplierPortal() {
@@ -18,6 +19,14 @@ export default function SupplierPortal() {
   const signOut = useStore((s) => s.signOut);
   const show = useToast((t) => t.show);
   const [tab, setTab] = useState<(typeof TABS)[number]>("Overview");
+  const barRef = useRef<HTMLElement>(null);
+  // Share the bar height so the sticky side panel in the case analysis sits below it.
+  useEffect(() => {
+    const el = barRef.current; if (!el) return;
+    const set = () => document.documentElement.style.setProperty("--hdr", matchMedia("(min-width: 768px)").matches ? `${el.getBoundingClientRect().height}px` : "0px");
+    set(); const ro = new ResizeObserver(set); ro.observe(el); window.addEventListener("resize", set);
+    return () => { ro.disconnect(); window.removeEventListener("resize", set); document.documentElement.style.setProperty("--hdr", "0px"); };
+  }, []);
   const sup = SUPPLIERS.find((s) => s.id === "TB")!;
   const me = PEOPLE.supplier;
 
@@ -39,9 +48,9 @@ export default function SupplierPortal() {
 
   return (
     <div className="min-h-screen">
-      <header className="bg-navy text-white md:sticky md:top-0 z-40">
+      <header ref={barRef} className="bg-navy text-white md:sticky md:top-0 z-40">
         <div className="page py-2 flex flex-wrap items-center gap-x-5 gap-y-1">
-          <span className="inline-flex items-center gap-3"><Logo /><span className="text-sm text-white/80">Supplier portal</span></span>
+          <span className="inline-flex items-center gap-3"><button type="button" onClick={() => { setTab("Overview"); window.scrollTo(0, 0); }} aria-label="Docket: back to the portal home" className="rounded-lg"><Logo /></button><span className="text-sm text-white/80">Supplier portal</span></span>
           <nav className="flex flex-wrap" aria-label="Supplier portal">
             {TABS.map((t) => (
               <button key={t} type="button" onClick={() => setTab(t)} aria-current={tab === t ? "page" : undefined}
@@ -56,21 +65,22 @@ export default function SupplierPortal() {
         </div>
       </header>
 
+      {tab === "Case analysis" ? <CaseStudy /> : (
       <main className="page py-6 max-w-6xl">
-        <h1 className="text-2xl md:text-3xl">{sup.name}</h1>
-        <p className="mt-1 text-[var(--muted)]">Your account with Larkspur Technologies Pvt Ltd. Today is {dmy(DEMO_TODAY)}.</p>
+        <div className="rounded-2xl tint-blue p-5"><h1 className="text-2xl md:text-3xl">{sup.name}</h1>
+        <p className="mt-1">Your account with Larkspur Technologies Pvt Ltd. Today is {dmy(DEMO_TODAY)}.</p></div>
 
         {tab === "Overview" && (
           <div className="mt-6 space-y-6">
             <div className="grid gap-4 md:grid-cols-3">
-              <div className={card}><p className="text-sm text-[var(--muted)]">Agreements in place</p><p className="mt-1 text-3xl font-display font-bold num">{docs.filter((d) => d.exec === "signed").length}</p></div>
-              <div className={card}><p className="text-sm text-[var(--muted)]">Open invoices</p><p className="mt-1 text-3xl font-display font-bold num">{invoices.length}</p></div>
-              <div className={card}><p className="text-sm text-[var(--muted)]">Next end date</p>
+              <div className={`${card} tint-green`}><p className="text-sm font-semibold"><svg aria-hidden width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-2 -mt-0.5"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5M9 14l2 2 4-4" /></svg>Agreements in place</p><p className="mt-1 text-3xl font-display font-bold num">{docs.filter((d) => d.exec === "signed").length}</p></div>
+              <div className={`${card} tint-amber`}><p className="text-sm font-semibold"><svg aria-hidden width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-2 -mt-0.5"><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" /></svg>Open invoices</p><p className="mt-1 text-3xl font-display font-bold num">{invoices.length}</p></div>
+              <div className={`${card} tint-blue`}><p className="text-sm font-semibold"><svg aria-hidden width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-2 -mt-0.5"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></svg>Next end date</p>
                 <p className="mt-1 text-xl font-display font-bold">{next ? dmy(next.expiry!) : "None"}</p>
                 {next && <p className="text-sm text-[var(--muted)]">{next.title}, in {daysBetween(DEMO_TODAY, next.expiry!)} days</p>}</div>
             </div>
 
-            <section aria-labelledby="msg" className={card} data-tour="action">
+            <section aria-labelledby="msg" className={`${card} ${agreed ? "tint-green" : hasMessage ? "story-box" : ""}`} data-tour="action">
               <h2 id="msg" className="text-xl">Messages from Larkspur</h2>
               {!hasMessage && !agreed && <p className="mt-2 text-[var(--muted)]">No messages.</p>}
               {hasMessage && (
@@ -107,7 +117,7 @@ export default function SupplierPortal() {
             <h2 id="ag" className="text-xl">Agreements <Label kind="simulated" source="Shared drive and e-signature platform" /></h2>
             <div className="mt-3 overflow-x-auto border border-[var(--line)] rounded-lg">
               <table className="w-full text-sm">
-                <thead className="bg-[var(--panel)]"><tr><th className={th}>Document</th><th className={th}>Type</th><th className={th}>Signed</th><th className={th}>Starts</th><th className={th}>Ends</th><th className={th}>Covers</th></tr></thead>
+                <thead className="bg-[var(--panel)]"><tr><th className={th}>Document</th><th className={th}>Type</th><th className={th}>Signed</th><th className={th}>Starts</th><th className={th}>Ends</th><th className={th}>Covers</th><th className={th}>Status</th></tr></thead>
                 <tbody>
                   {docs.map((d) => (
                     <tr key={d.id} className="border-t border-[var(--line)]">
@@ -117,6 +127,7 @@ export default function SupplierPortal() {
                       <td className={td}>{dmy(d.effective)}</td>
                       <td className={td}>{d.expiry ? dmy(d.expiry) : "No end date"}</td>
                       <td className={td}>{d.scope === "All" || d.scope === "All SOWs" ? "The whole agreement" : d.scope}</td>
+                      <td className={td}><span className={`pill ${d.exec === "signed" ? "pill-ok" : "pill-wait"}`}>{d.exec === "signed" ? "Signed by both" : "Not signed by both"}</span></td>
                     </tr>
                   ))}
                 </tbody>
@@ -142,12 +153,13 @@ export default function SupplierPortal() {
               <h2 id="iv" className="text-xl">Open invoices <Label kind="simulated" source="ERP (accounts payable)" /></h2>
               <div className="mt-3 overflow-x-auto border border-[var(--line)] rounded-lg">
                 <table className="w-full text-sm">
-                  <thead className="bg-[var(--panel)]"><tr><th className={th}>Invoice</th><th className={th}>Dated</th><th className={th}>Due</th><th className={`${th} text-right`}>Before GST</th><th className={`${th} text-right`}>GST</th><th className={`${th} text-right`}>Total</th></tr></thead>
+                  <thead className="bg-[var(--panel)]"><tr><th className={th}>Invoice</th><th className={th}>Dated</th><th className={th}>Due</th><th className={`${th} text-right`}>Before GST</th><th className={`${th} text-right`}>GST</th><th className={`${th} text-right`}>Total</th><th className={th}>Status</th></tr></thead>
                   <tbody>
                     {invoices.map((i) => { const t = checkInvoice(i, {}).totals; return (
                       <tr key={i.id} className="border-t border-[var(--line)]">
                         <td className={td}>{i.id}</td><td className={td}>{dmy(i.date)}</td><td className={td}>{dmy(i.due)}</td>
                         <td className={`${td} text-right num`}>{inr(t.sub)}</td><td className={`${td} text-right num`}>{inr(t.gst)}</td><td className={`${td} text-right num font-semibold`}>{inr(t.total)}</td>
+                        <td className={td}><span className="pill pill-wait">Open, due {dmy(i.due)}</span></td>
                       </tr>); })}
                   </tbody>
                 </table>
@@ -165,7 +177,7 @@ export default function SupplierPortal() {
             </div>
           </section>
         )}
-      </main>
+      </main>)}
     </div>
   );
 }
