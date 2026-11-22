@@ -21,7 +21,7 @@ const ROLE_JOB: Record<Role, string> = {
 };
 
 // A short list of lines, one idea per line.
-const Lines = ({ lines }: { lines: string[] }) => <div className="mt-2 space-y-2 text-[15px]">{lines.map((l) => <p key={l}>{l}</p>)}</div>;
+const Lines = ({ lines }: { lines: string[] }) => <ul className="mt-3 mx-auto w-fit max-w-full list-disc pl-5 space-y-2 text-left text-[15px]">{lines.map((l) => <li key={l}>{l}</li>)}</ul>;
 
 // Step 1: what this is. Step 2: simulated sign-in. Step 3: how to start.
 export default function Welcome() {
@@ -36,7 +36,7 @@ export default function Welcome() {
   const gap = inr(checkInvoice(INVOICES[0], { termState: { t4: "verified" } }).totals.disputable);
   const field = "h-10 w-full border border-[var(--line)] rounded-lg px-3 bg-transparent";
   const btn = "min-h-[44px] px-6 rounded-lg font-semibold";
-  const card = "rounded-2xl border border-[var(--line)] p-6 text-center flex flex-col items-center";
+  const card = "rounded-2xl border border-[var(--line)] p-6 flex flex-col";
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,11 +60,11 @@ export default function Welcome() {
                 </h1>
                 <p className="mt-4 text-center text-lg text-[var(--muted)]">See the idea in one example.</p>
                 <div className="mt-6 grid gap-4 md:grid-cols-3">
-                  <div className={card}><h2 className="text-lg">What happened</h2>
+                  <div className={card}><h2 className="text-lg text-center">What happened</h2>
                     <Lines lines={[`A supplier billed ${inr(invoiceRate())}/hr.`, `The signed contract says ${inr(contractRate())}/hr since 1 October.`, "Nobody noticed: the purchase order still had the old rate."]} /></div>
-                  <div className={card}><h2 className="text-lg">What should have happened</h2>
+                  <div className={card}><h2 className="text-lg text-center">What should have happened</h2>
                     <Lines lines={[`Finance pays ${inr(contractRate())}/hr.`, `The ${gap} overcharge on one line is caught before payment.`, "It is recovered with a credit note."]} /></div>
-                  <div className={card}><h2 className="text-lg">How Docket points it out</h2>
+                  <div className={card}><h2 className="text-lg text-center">How Docket points it out</h2>
                     <Lines lines={["Works out which signed terms apply.", "Checks the invoice against them.", "Shows the proof.", "Sends the gap to the person who can act."]} /></div>
                 </div>
                 <div className="mt-8 text-center"><button type="button" className={`${btn} bg-navy text-white`} onClick={() => setStep("signin")}>Continue</button></div>
@@ -74,7 +74,7 @@ export default function Welcome() {
                 <p><span className="font-semibold">A prototype for a case.</span> Companies, people and data are fictional. Nothing is sent and no money moves.</p>
                 <p><span className="font-semibold">The Case analysis page is part of the submission</span>, not part of the product. It holds the reasoning behind it.</p>
                 <p>Amber tags like <span className="chip-assume">A7</span> mark an <span className="font-semibold">assumption</span> we made to build this. All ten are on the Case analysis page.</p>
-                <p>Labels like <span className="inline-block rounded-full border border-[var(--line)] px-2 text-xs">Calculated</span> or <span className="inline-block rounded-full border border-[var(--line)] px-2 text-xs">Simulated data</span> say where a result came from.</p>
+                <p>Labels like <span className="lbl lbl-calculated">Calculated</span> or <span className="lbl lbl-simulated">Simulated data</span> say where a result came from.</p>
               </aside>
             </div>
           )}

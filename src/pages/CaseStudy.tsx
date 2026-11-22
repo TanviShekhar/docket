@@ -160,7 +160,7 @@ export default function CaseStudy() {
         <div className="pt-8"><H2 id="prototype">4. The prototype</H2></div>
         <p>What you can try: three chapters (Invoice, Renewal, Service credit), five roles, every step changes the state. Start from the <Link to="/" className="underline">To-do</Link> page, switch role with "Viewing as", and open any item.</p>
         <H3>Labels legend</H3>
-        <Table head={["Label", "What it means"]} rows={LABEL_KINDS.map((k) => [<span key={k} className="inline-block rounded-full border border-[var(--line)] px-2 text-xs">{NAME[k]}</span>, TEXT[k]])} />
+        <Table head={["Label", "What it means"]} rows={LABEL_KINDS.map((k) => [<span key={k} className={`lbl lbl-${k}`}>{NAME[k]}</span>, TEXT[k]])} />
         <H3>What is real vs simulated</H3>
         <Table head={["Part", "Status", "Detail"]} rows={REAL_VS_SIM} />
         <p>Sample documents are modelled on Law Insider contract types (Service Agreement, Statement of Work, Subscription Agreement, Services Agreement, Consulting Agreement). All company names are fictional. <a className="underline" href="https://www.lawinsider.com/tags/category" target="_blank" rel="noreferrer">Law Insider sample contract categories</a>.</p>

@@ -74,3 +74,20 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px
   .big-yearly { color: #93b4ff; }
 }
 @media (min-width: 1024px) { .item-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 8fr); } }
+
+/* Honesty labels each have their own colour, so people learn what they mean: green calculated, amber simulated, blue recorded AI. */
+.lbl { display: inline-block; border: 1px solid; border-radius: 9999px; padding: 0 0.55rem; font-size: 0.75rem; font-weight: 600; line-height: 1.4rem; }
+.lbl-calculated { background: #dcfce7; color: #14532d; border-color: #86efac; }
+.lbl-simulated { background: #fef3c7; color: #78350f; border-color: #fcd34d; }
+.lbl-ai { background: #dbeafe; color: #1e3a8a; border-color: #93c5fd; }
+.lbl-rules { background: #e2e8f0; color: #1e293b; border-color: #94a3b8; }
+.lbl-template { background: #cffafe; color: #134e4a; border-color: #67e8f9; }
+.lbl-input { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
+@media (prefers-color-scheme: dark) {
+  .lbl-calculated { background: #0f3d2a; color: #86efac; border-color: #1f7a52; }
+  .lbl-simulated { background: #43320c; color: #fcd34d; border-color: #8a6a1c; }
+  .lbl-ai { background: #14264f; color: #bfdbfe; border-color: #2f4fa0; }
+  .lbl-rules { background: #1e293b; color: #cbd5e1; border-color: #475569; }
+  .lbl-template { background: #0c3a3f; color: #a5f3fc; border-color: #1f7a85; }
+  .lbl-input { background: #1e293b; color: #cbd5e1; border-color: #475569; }
+}

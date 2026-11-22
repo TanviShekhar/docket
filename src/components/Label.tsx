@@ -23,7 +23,7 @@ export default function Label({ kind, source }: { kind: LabelKind; source?: stri
   return (
     <span className="inline-block align-middle">
       <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} title={text}
-        className="min-h-[24px] px-2 rounded-full border border-[var(--line)] text-xs text-[var(--muted)]">
+        className={`lbl lbl-${kind}`}>
         {NAME[kind]}
       </button>
       {open && <span className="ml-2 text-xs text-[var(--muted)]">{text}</span>}
