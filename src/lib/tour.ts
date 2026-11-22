@@ -58,7 +58,7 @@ export const CHAPTERS: Chapter[] = [
       { title: "Docket drafts, you send", route: "/item/A7", target: "proof", role: "finance", isDone: (s) => !!s.done.A7, run: () => st().sendDispute(),
         text: "Docket never sends anything. It drafts the email with the clause and the sum filled in. Finance sends it from their own mailbox, then tells Docket." },
       { title: "The supplier's view", route: "/item/A8", target: "action", role: "supplier", isDone: (s) => !!s.done.A8, run: () => st().supplierAgrees(),
-        text: "Now you are the supplier. The page is deliberately simple: the clause, the invoice line, the sum. They can agree and issue a credit note, or explain why they disagree." },
+        text: "Now you are the supplier, in their own portal. They see only their agreements, invoices and messages, never Larkspur's internal checks. Here is the email Larkspur sent. They can agree and issue a credit note, or explain why they disagree." },
       { title: "Record the credit note", route: "/", target: "gap", role: "finance", isDone: (s) => !!s.done.A9, run: () => st().recordCredit(),
         text: "A credit note is a document from the supplier that reduces what you owe. When Finance records it, the gap on the to-do page turns from magenta to teal: money recovered." },
       { title: "Stop it happening again", route: "/item/A10", target: "proof", role: "procurement", isDone: (s) => !!s.done.A10, run: () => st().sendPoUpdate(),

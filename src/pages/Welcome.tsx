@@ -42,6 +42,7 @@ export default function Welcome() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (user.trim() !== "test" || pass !== "test") { setErr("Use test for both the username and the password."); return; }
+    if (role === "supplier") { signIn(role); nav("/"); return; } // suppliers go straight to their portal
     usePicking.setState({ picking: true }); signIn(role); setDone(true);
   };
   const go = (tour: boolean) => { usePicking.setState({ picking: false }); nav("/"); if (tour) setTimeout(() => useTour.getState().start(), 150); };
@@ -99,7 +100,7 @@ export default function Welcome() {
               </section>
               <aside className="story-box p-6">
                 <h2 className="text-xl">The idea: one issue, five people</h2>
-                <p className="mt-2 text-sm">A single contract problem touches five people. Sign in as any of them and switch at any time from the top bar.</p>
+                <p className="mt-2 text-sm">A single contract problem touches five people. Four of them work at Larkspur and can switch between each other from the top bar. The supplier signs in to a separate portal and sees only their own account.</p>
                 <dl className="mt-4 space-y-3 text-sm">
                   {(Object.keys(PEOPLE) as Role[]).map((r) => (
                     <div key={r}><dt className="font-semibold">{PEOPLE[r].name}, {ROLE_LABEL[r]}</dt><dd>{ROLE_JOB[r]}</dd></div>

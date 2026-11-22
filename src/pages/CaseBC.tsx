@@ -8,7 +8,7 @@ import { useStore, useToast } from "../lib/store";
 import { dueLine } from "../lib/todo";
 import ItemFrame from "../components/ItemFrame";
 import Label from "../components/Label";
-import { Gate, Primary, ProofCard, Quote, Secondary } from "../components/ui";
+import { AiRead, Gate, HowCard, Primary, ProofCard, Quote, Row, Secondary } from "../components/ui";
 import { Done, Draft } from "./CaseA";
 
 const clause = (docId: string, ref: string) => DOCS.find((d) => d.id === docId)!.clauses.find((c) => c.ref === ref)!;
@@ -81,10 +81,12 @@ function B1() {
         <Secondary onClick={() => run(() => snap.decideCap(false))}>Exception applies</Secondary>
       </Gate>}
       how={<>
-        <div><h3 className="text-base">What the AI read <Label kind="ai" /></h3><p>{ai.field}: {ai.value}. Confidence {Math.round(ai.confidence * 100)}% · Flag: {ai.flag}</p>
-          <p>Evidence check: {grounded(text, ai.quote) ? "Quote found in the document." : "Quote NOT found."} This proves the quote exists, not that its meaning was read correctly.</p><p>Why: {j.why}</p></div>
-        <div><h3 className="text-base">The calculation <Label kind="calculated" /></h3>
-          <p className="num">At the quote: {inr(f.rm.asQuote)}. At the cap: {inr(cdFacts({ ...snap, capApplies: true }).rm.atCap)}. Cap saving: {inr(cdFacts({ ...snap, capApplies: true }).rm.capSaving)} a year.</p></div></>} />
+        <AiRead field={ai.field} value={ai.value} confidence={ai.confidence} flag={ai.flag} evidenceOk={grounded(text, ai.quote)} why={j.why} />
+        <HowCard title="The calculation" label="calculated">
+          <Row k="Cost at their quote"><span className="num">{inr(f.rm.asQuote)}</span></Row>
+          <Row k={`Cost at the ${capPct()}% cap`}><span className="num">{inr(cdFacts({ ...snap, capApplies: true }).rm.atCap)}</span></Row>
+          <Row k="Cap saving, every year"><span className="num font-semibold">{inr(cdFacts({ ...snap, capApplies: true }).rm.capSaving)}</span></Row>
+        </HowCard></>} />
   );
 }
 
@@ -146,7 +148,10 @@ function B2() {
         <Secondary onClick={() => run(() => snap.decideRenewal("asis"))}>Renew as quoted</Secondary>
         <Secondary onClick={() => run(() => snap.decideRenewal("dont"))}>Don't renew</Secondary>
       </Gate>}
-      how={<p className="num">{f.seats} seats × {inr(CD_SEATS.price)} × (1 + {f.pct}%) = {inr(f.rm.atSeats)}. Today: {CD_SEATS.contracted} × {inr(CD_SEATS.price)} = {inr(f.rm.current)}. <Label kind="calculated" /></p>} />
+      how={<HowCard title="The calculation" label="calculated">
+        <Row k="Cost today"><span className="num">{CD_SEATS.contracted} seats × {inr(CD_SEATS.price)} = {inr(f.rm.current)}</span></Row>
+        <Row k={`Cost at ${f.seats} seats, with the ${f.pct}% increase`}><span className="num">{f.seats} seats × {inr(CD_SEATS.price)} × (1 + {f.pct}%) = {inr(f.rm.atSeats)}</span></Row>
+      </HowCard>} />
   );
 }
 
@@ -217,8 +222,7 @@ function C1() {
         <Primary onClick={() => run(snap.confirmSla)}>Confirm clause</Primary>
       </Gate>}
       how={<>{AI_RUNS["SH-MSA"].map((a) => (
-        <div key={a.field}><h3 className="text-base">{a.field} <Label kind="ai" /></h3><p>{a.value}. Confidence {Math.round(a.confidence * 100)}%{a.flag ? ` · Flag: ${a.flag}` : ""}</p>
-          <p>Evidence check: {grounded(text, a.quote) ? "Quote found in the document." : "Quote NOT found."} This proves the quote exists, not that its meaning was read correctly.</p></div>
+        <AiRead key={a.field} title={a.field} value={a.value} confidence={a.confidence} flag={a.flag} evidenceOk={grounded(text, a.quote)} />
       ))}</>} />
   );
 }
@@ -256,7 +260,14 @@ function C2() {
       action={<Gate owner="procurement" done={!!snap.done.C2} doneNode={<Done>You {snap.fmAccepted ? "accepted" : "did not accept"} force majeure. The claim is {inr(f.chosen.credit)}.</Done>}>
         <p className="text-sm">Choose an option above. The {d.customerCaused} shipments delayed by us stay excluded either way.</p>
       </Gate>}
-      how={<><p>{j.why}</p><p className="num">Eligible shipments: {d.total} − {d.customerCaused}{" "}= {f.reject.eligible} (or {f.accept.eligible} if force majeure is accepted).</p></>} />
+      how={<>
+        <HowCard title="Why not accept force majeure" label="ai"><p>{j.why}</p></HowCard>
+        <HowCard title="Eligible shipments" label="calculated">
+          <Row k="Total shipments"><span className="num">{d.total.toLocaleString("en-IN")}</span></Row>
+          <Row k="Less: delayed by us"><span className="num">{d.customerCaused}</span></Row>
+          <Row k="Eligible, force majeure not accepted"><span className="num font-semibold">{f.reject.eligible.toLocaleString("en-IN")}</span></Row>
+          <Row k="Eligible, force majeure accepted"><span className="num font-semibold">{f.accept.eligible.toLocaleString("en-IN")}</span></Row>
+        </HowCard></>} />
   );
 }
 

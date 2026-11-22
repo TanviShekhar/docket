@@ -14,7 +14,7 @@ const TABS = [
   { to: "/value", label: "Value" },
   { to: "/case-study", label: "Case analysis" },
 ];
-const ROLES = Object.keys(PEOPLE) as Role[];
+const ROLES = (Object.keys(PEOPLE) as Role[]).filter((r) => r !== "supplier"); // suppliers sign in to their own portal
 const ROLE_LABEL: Record<Role, string> = { finance: "Finance", legal: "Legal", procurement: "Procurement", owner: "Business owner", supplier: "Supplier" };
 const todayLabel = D(DEMO_TODAY).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" }).replace(",", "");
 

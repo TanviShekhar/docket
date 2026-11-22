@@ -49,8 +49,13 @@ export default function EvidenceDrawer({ term, cands, onClose }: { term: Term; c
         <section>
           <h3 className="text-base">What the AI read <Label kind="ai" /></h3>
           {ai ? (<>
-            <p>{ai.field}: {ai.value}. Confidence {Math.round(ai.confidence * 100)}%{ai.flag ? ` · Flag: ${ai.flag}` : ""}</p>
-            <p className="mt-1">Evidence check: {grounded(text, ai.quote) ? "Quote found in the document." : "Quote NOT found in the document."} This proves the quote exists, not that its meaning was read correctly.</p>
+            <div className="mt-1 space-y-2">
+              <div><div className="text-xs font-semibold text-[var(--muted)]">Field</div>{ai.field}</div>
+              <div><div className="text-xs font-semibold text-[var(--muted)]">Value</div>{ai.value}</div>
+              <div><div className="text-xs font-semibold text-[var(--muted)]">Confidence</div>{Math.round(ai.confidence * 100)}%</div>
+              {ai.flag && <div><div className="text-xs font-semibold text-[var(--muted)]">Flag</div>{ai.flag}</div>}
+              <div><div className="text-xs font-semibold text-[var(--muted)]">Evidence check</div>{grounded(text, ai.quote) ? "Quote found in the document" : "Quote not found in the document"}<span className="block text-[var(--muted)]">This proves the quote exists, not that its meaning was read correctly</span></div>
+            </div>
           </>) : <p>No recorded AI run for this term.</p>}
         </section>
         <section>

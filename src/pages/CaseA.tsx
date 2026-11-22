@@ -9,7 +9,7 @@ import { useStore, useToast } from "../lib/store";
 import Label from "../components/Label";
 import ItemFrame from "../components/ItemFrame";
 import InvoiceTable from "../components/InvoiceTable";
-import { Gate, Primary, ProofCard, Quote, Secondary } from "../components/ui";
+import { AiRead, Gate, HowCard, Primary, ProofCard, Quote, Row, Secondary } from "../components/ui";
 
 const A_PROGRESS = ["Checked by Legal", "Confirmed by Finance", "Sent to supplier", "Supplier agrees", "Credit received", "Price fixed at source"];
 const A_STEPS = ["A1", "A5", "A7", "A8", "A9", "A10"];
@@ -98,24 +98,24 @@ function A1() {
         </div>
       </Gate>}
       how={<>
-        <div>
-          <h3 className="text-base">Which version of the rate wins <Label kind="calculated" /></h3>
-          <ul className="mt-1 space-y-1">{res.cands.map((c) => (
-            <li key={c.t.id}><span className="num">{inr(c.t.value as number)}/hr</span>, {c.doc.title} ({c.doc.signed ? `signed ${nice(c.doc.signed)}` : "not signed by both parties"}): {c.reason ?? "this one counts"}</li>
-          ))}</ul>
-        </div>
-        <div>
-          <h3 className="text-base">What the AI read <Label kind="ai" /></h3>
-          <p>Field: {ai.field}. Value: {ai.value}. Confidence: {Math.round(ai.confidence * 100)}%</p>
-          <p>Evidence check: {grounded(amdText, ai.quote) ? "Quote found in the document." : "Quote NOT found in the document."} This proves the quote exists, not that its meaning was read correctly.</p>
-          <p>Why: {j.why}</p>
-          <details><summary className="cursor-pointer min-h-[44px] flex items-center">Show the prompt</summary><pre className="whitespace-pre-wrap text-xs">{EXTRACTION_PROMPT}</pre></details>
-        </div>
-        <div>
-          <h3 className="text-base">The calculation <Label kind="calculated" /></h3>
-          <p className="num">{line.l.qty} h × ({inr(line.l.rate)} − {inr(line.exp ?? 0)}) = {inr(line.diff ?? 0)}</p>
-          <p className="num">GST at {Math.round(f.inv.gst * 100)}% on the difference = {inr(after.totals.disputableGst)}</p>
-        </div>
+        <HowCard title="Which rate wins" label="calculated">
+          {res.cands.map((c) => (
+            <div key={c.t.id} className="rounded-lg border border-[var(--line)] p-2">
+              <p><span className="num font-semibold">{inr(c.t.value as number)}/hr</span> <span className={`pill ${c.reason ? "pill-wait" : "pill-ok"}`}>{c.reason ? "Does not count" : "Counts"}</span></p>
+              <p className="text-[var(--muted)]">{c.doc.title}, {c.doc.signed ? `signed ${nice(c.doc.signed)}` : "not signed by both parties"}</p>
+              {c.reason && <p>{c.reason}</p>}
+            </div>
+          ))}
+        </HowCard>
+        <AiRead field={ai.field} value={ai.value} confidence={ai.confidence} evidenceOk={grounded(amdText, ai.quote)} why={j.why}>
+          <details><summary className="cursor-pointer min-h-[44px] flex items-center underline">Show the prompt</summary><pre className="whitespace-pre-wrap text-xs">{EXTRACTION_PROMPT}</pre></details>
+        </AiRead>
+        <HowCard title="The calculation" label="calculated">
+          <Row k="Hours billed">{line.l.qty} h</Row>
+          <Row k="Rate gap per hour"><span className="num">{inr(line.l.rate)} − {inr(line.exp ?? 0)} = {inr(f.perHour)}</span></Row>
+          <Row k="Difference"><span className="num font-semibold">{inr(line.diff ?? 0)}</span></Row>
+          <Row k={`GST at ${Math.round(f.inv.gst * 100)}% on the difference`}><span className="num">{inr(after.totals.disputableGst)}</span></Row>
+        </HowCard>
       </>} />
   );
 }
@@ -130,7 +130,7 @@ function A2() {
       action={snap.done.A1
         ? <Link to="/" className="inline-flex items-center min-h-[44px] px-4 rounded-lg bg-navy text-white font-semibold">Back to your to-do</Link>
         : <Done>Waiting on Legal. Nothing for you to do on this page yet. <Link to="/item/A1" className="underline">See Legal's step</Link></Done>}
-      how={<p>Each line is compared with the terms in force for its project order and service date. A rate that Legal has not checked cannot start a dispute. <Label kind="calculated" /></p>} />
+      how={<HowCard title="How each line is checked" label="calculated"><p>Each line is compared with the terms in force for its project order and service date.</p><p>A rate that Legal has not checked cannot start a dispute.</p></HowCard>} />
   );
 }
 
@@ -157,8 +157,13 @@ function A3() {
         <Primary onClick={() => run(() => snap.confirmRole(true))}>Yes, it's a Senior Developer</Primary>
         <Secondary onClick={() => run(() => snap.confirmRole(false))}>No, ask the supplier</Secondary>
       </Gate>}
-      how={<><div><h3 className="text-base">Why Docket thinks so <Label kind="ai" /></h3><p>{j.why}</p></div>
-        <div><h3 className="text-base">The calculation <Label kind="calculated" /></h3><p className="num">{l.qty} h × ({inr(l.rate)} − {inr(checked.exp ?? 0)}) = {inr(checked.diff ?? 0)}</p></div></>} />
+      how={<>
+        <HowCard title="Why Docket thinks so" label="ai"><p>{j.why}</p></HowCard>
+        <HowCard title="The calculation" label="calculated">
+          <Row k="Hours billed">{l.qty} h</Row>
+          <Row k="Rate gap per hour"><span className="num">{inr(l.rate)} − {inr(checked.exp ?? 0)} = {inr(f.perHour)}</span></Row>
+          <Row k="Difference"><span className="num font-semibold">{inr(checked.diff ?? 0)}</span></Row>
+        </HowCard></>} />
   );
 }
 
@@ -177,7 +182,7 @@ function A4() {
         <Primary onClick={() => run(() => snap.resolveExpense(true))}>Attach approval email</Primary>
         <Secondary onClick={() => run(() => snap.resolveExpense(false))}>Dispute this line too</Secondary>
       </Gate>}
-      how={<p>Expenses are not rate differences, so Docket does not count this line in the confirmed amount. <Label kind="calculated" /></p>} />
+      how={<HowCard title="Why this is kept apart" label="calculated"><p>Expenses are not rate differences.</p><p>Docket does not count this line in the confirmed amount.</p></HowCard>} />
   );
 }
 
@@ -201,7 +206,7 @@ function A5() {
       action={<Gate owner="finance" needsA1 done={!!snap.done.A5} doneNode={<Done>Confirmed by {PEOPLE.finance.name}. The difference is {inr(f.base)} plus GST {inr(f.gst)}.</Done>}>
         <Primary onClick={() => run(snap.confirmDifference)}>Confirm difference</Primary>
       </Gate>}
-      how={<p className="num">GST at {Math.round(f.inv.gst * 100)}% × {inr(f.base)} = {inr(f.gst)}. <Label kind="calculated" /></p>} />
+      how={<HowCard title="The calculation" label="calculated"><Row k="Difference before GST"><span className="num font-semibold">{inr(f.base)}</span></Row><Row k={`GST at ${Math.round(f.inv.gst * 100)}% on the difference`}><span className="num">{inr(f.gst)}</span></Row><Row k="Total correction"><span className="num font-semibold">{inr(f.hold)}</span></Row></HowCard>} />
   );
 }
 
@@ -267,7 +272,7 @@ function A8() {
             <p className="mt-2 text-sm text-[var(--muted)]">Signed in as {supplierName}, Billing. A credit note is a document from you that reduces what Larkspur owes.</p>
           </Gate>
         )}
-      how={<p className="num">{f.overHours} h × ({inr(f.billed)} − {inr(f.rate)}) = {inr(f.base)}. GST {inr(f.gst)}. <Label kind="calculated" /></p>} />
+      how={<HowCard title="The calculation" label="calculated"><Row k="Hours billed at the old rate">{f.overHours} h</Row><Row k="Rate gap per hour"><span className="num">{inr(f.billed)} − {inr(f.rate)} = {inr(f.perHour)}</span></Row><Row k="Difference"><span className="num font-semibold">{inr(f.base)}</span></Row><Row k="GST on the difference"><span className="num">{inr(f.gst)}</span></Row></HowCard>} />
   );
 }
 
@@ -315,6 +320,6 @@ function A11() {
       ) : <p className="text-sm text-[var(--muted)]">Not loaded yet.</p>}
       action={snap.done.A11 ? <Link to="/value" className="inline-flex items-center min-h-[44px] px-4 rounded-lg bg-navy text-white font-semibold">See the Value screen</Link>
         : <Primary onClick={() => run(snap.showDecember)}>Show December's invoice</Primary>}
-      how={<p>The same checks run on the new invoice, using the rate Legal confirmed. <Label kind="calculated" /></p>} />
+      how={<HowCard title="How it is checked" label="calculated"><p>The same checks run on the new invoice.</p><p>They use the rate Legal confirmed.</p></HowCard>} />
   );
 }

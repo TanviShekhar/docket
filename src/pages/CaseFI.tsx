@@ -9,7 +9,7 @@ import { checkStateOf } from "../lib/ledger";
 import { useStore, useToast } from "../lib/store";
 import ItemFrame from "../components/ItemFrame";
 import Label from "../components/Label";
-import { Gate, Primary, ProofCard, Quote, Secondary } from "../components/ui";
+import { AiRead, Gate, HowCard, Primary, ProofCard, Quote, Row, Secondary } from "../components/ui";
 import { Done } from "./CaseA";
 
 export default function CaseFI({ id }: { id: string }) {
@@ -63,7 +63,10 @@ function VersionCheck() {
       action={<Gate owner="legal" done={!!snap.done.F} doneNode={<Done>{op.name} confirmed as the contract that counts. The other {pick.others.length} files are marked "Not current" everywhere.</Done>}>
         <Primary onClick={() => show(snap.confirmSigned())}>Confirm the signed copy and mark drafts as not current</Primary>
       </Gate>}
-      how={<p>Only {op.name} has both signatures and a completed e-signature record, so exactly one file qualifies. Docket compared the Senior Developer rate in each file: {pick.diffs.map((d) => d.note).join(". ")}. <Label kind="calculated" /></p>} />
+      how={<>
+        <HowCard title="Why one file counts" label="calculated"><p>Only {op.name} has both signatures and a completed e-signature record.</p><p>So exactly one file qualifies.</p></HowCard>
+        <HowCard title="The rate in each draft" label="calculated">{pick.diffs.map((d) => <p key={d.name}><span className="font-semibold">{d.name}</span><span className="block text-[var(--muted)]">{d.note}</span></p>)}</HowCard>
+      </>} />
   );
 }
 
@@ -105,7 +108,7 @@ function TrackerCheck() {
         <Secondary onClick={copy}>Copy corrected rows</Secondary>
         <p className="mt-2 text-sm text-[var(--muted)]">Docket cannot edit your Excel file on a static site. It records the fix, and you paste the corrected rows into the tracker.</p>
       </Gate>}
-      how={<p>Each row is compared with the term in force today for the same supplier and project order. Dates are worked out with the working-day rules. <Label kind="calculated" /></p>} />
+      how={<HowCard title="How each row is checked" label="calculated"><p>Each row is compared with the term in force today for the same supplier and project order.</p><p>Dates are worked out with the working-day rules.</p></HowCard>} />
   );
 }
 
@@ -136,7 +139,11 @@ function Coverage() {
         {c.covered !== before.covered && <p className="text-sm">Before the Zenith quote was added: {before.covered} of {before.paid}. Now: {c.covered} of {c.paid}.</p>}
       </div>}
       action={<Done>{snap.done.H ? "Contract requests started for every supplier on the list. Intake takes it from here." : "Start a contract request for each supplier above. Intake is outside this release, so Docket logs each request for intake."}</Done>}
-      how={<p className="num">{c.covered} of {c.paid} suppliers = {c.bySupplierPct}%. By spend: {c.bySpendPct}%. Both are shown because spend coverage hides small shadow suppliers. <Label kind="calculated" /></p>} />
+      how={<HowCard title="The calculation" label="calculated">
+        <Row k="By supplier"><span className="num">{c.covered} of {c.paid} suppliers = {c.bySupplierPct}%</span></Row>
+        <Row k="By spend"><span className="num">{c.bySpendPct}%</span></Row>
+        <p className="text-[var(--muted)]">Both are shown because spend coverage hides small shadow suppliers.</p>
+      </HowCard>} />
   );
 }
 
@@ -176,8 +183,14 @@ function Brightline() {
           <div className="mt-2"><Secondary onClick={() => (reason.trim() ? show(snap.rejectBrightline(reason.trim())) : setOpen(true))}>Send reason</Secondary></div>
         </div>
       </Gate>}
-      how={<><p>{added ? "The letter is now filed, so it counts." : "Until Legal adds it, the letter does not count."} Docket checked the term dates: it starts {dmy(TERMS.find((t) => t.id === "t13")!.from)} and ends {dmy(TERMS.find((t) => t.id === "t13")!.to!)}.</p>
-        <p>Evidence check: {grounded(doc.clauses.map((x) => x.text).join("\n"), ai.quote) ? "Quote found in the document." : "Quote NOT found."} This proves the quote exists, not that its meaning was read correctly. <Label kind="ai" /></p></>} />
+      how={<>
+        <HowCard title="The term dates" label="calculated">
+          <Row k="Starts">{dmy(TERMS.find((t) => t.id === "t13")!.from)}</Row>
+          <Row k="Ends">{dmy(TERMS.find((t) => t.id === "t13")!.to!)}</Row>
+          <Row k="Status">{added ? "The letter is filed, so it counts" : "Until Legal adds it, the letter does not count"}</Row>
+        </HowCard>
+        <AiRead field={ai.field} value={ai.value} confidence={ai.confidence} flag={ai.flag} evidenceOk={grounded(doc.clauses.map((x) => x.text).join("\n"), ai.quote)} />
+      </>} />
   );
 }
 
@@ -201,6 +214,9 @@ function Zenith() {
       action={<Gate owner="legal" done={!!snap.done.I2} doneNode={<Done>Added as Zenith's contract. Suppliers with a contract: {now.covered} of {now.paid}. This was signed outside Procurement. Procurement has been told.</Done>}>
         <Primary onClick={() => show(snap.addZenith())}>Add as Zenith's contract</Primary>
       </Gate>}
-      how={<p>Coverage is recalculated once the quote is filed: it moves from {without.covered} of {without.paid} to {coverage({ "ZE-Q": true }).covered} of {without.paid}. <Label kind="calculated" /></p>} />
+      how={<HowCard title="The calculation" label="calculated">
+        <Row k="Before the quote is added"><span className="num">{without.covered} of {without.paid} suppliers</span></Row>
+        <Row k="After the quote is added"><span className="num">{coverage({ "ZE-Q": true }).covered} of {without.paid} suppliers</span></Row>
+      </HowCard>} />
   );
 }

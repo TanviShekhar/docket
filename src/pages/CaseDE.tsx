@@ -6,7 +6,7 @@ import { useStore, useToast } from "../lib/store";
 import { dueLine } from "../lib/todo";
 import ItemFrame from "../components/ItemFrame";
 import Label from "../components/Label";
-import { Gate, Primary, ProofCard, Quote } from "../components/ui";
+import { AiRead, Gate, HowCard, Primary, ProofCard, Quote } from "../components/ui";
 import { Done } from "./CaseA";
 
 export default function CaseDE({ id }: { id: string }) {
@@ -33,8 +33,10 @@ function PrimeFacility() {
       action={<Gate owner="legal" done={!!snap.done.D} doneNode={<Done>Added to the renegotiation list for {renewMonth}. Nothing else is needed now.</Done>}>
         <Primary onClick={() => show(snap.addRenegotiation())}>Add to the renegotiation list for {renewMonth}</Primary>
       </Gate>}
-      how={<><p>The agreement ends {dmy(doc.expiry!)}, so that is the next chance to add a measurable time limit.</p>
-        <p>Evidence check: {grounded(doc.clauses.map((x) => x.text).join("\n"), ai.quote) ? "Quote found in the document." : "Quote NOT found."} This proves the quote exists, not that its meaning was read correctly. <Label kind="ai" /></p></>} />
+      how={<>
+        <HowCard title="Next chance to fix it"><p>The agreement ends {dmy(doc.expiry!)}.</p><p>That is the next chance to add a measurable time limit.</p></HowCard>
+        <AiRead field={ai.field} value={ai.value} confidence={ai.confidence} flag={ai.flag} evidenceOk={grounded(doc.clauses.map((x) => x.text).join("\n"), ai.quote)} />
+      </>} />
   );
 }
 
@@ -59,6 +61,6 @@ function Northstar() {
       action={<Gate owner="finance" done={!!snap.done.E} doneNode={<Done>Sent to Procurement as a new contract request. They have been told.</Done>}>
         <Primary onClick={() => show(snap.sendToIntake())}>Send to Procurement as a new contract request</Primary>
       </Gate>}
-      how={<p>Docket matched the supplier name against every contract family and the supplier master. No signed contract and no purchase order matched. <Label kind="calculated" /></p>} />
+      how={<HowCard title="How Docket looked" label="calculated"><p>It matched the supplier name against every contract family and the supplier master.</p><p>No signed contract and no purchase order matched.</p></HowCard>} />
   );
 }

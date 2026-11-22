@@ -7,6 +7,7 @@ import Supplier from "./pages/Supplier";
 import Value from "./pages/Value";
 import CaseStudy from "./pages/CaseStudy";
 import Welcome, { usePicking } from "./pages/Welcome";
+import SupplierPortal from "./pages/SupplierPortal";
 import Toast from "./components/Toast";
 import TourGuide from "./components/TourGuide";
 import { useStore } from "./lib/store";
@@ -17,7 +18,17 @@ export default function App() {
   const picking = usePicking((s) => s.picking);
   const touring = useTour((t) => t.chapter !== null);
   const pickerOpen = useTour((t) => t.open);
+  const role = useStore((s) => s.role);
   if (!signedIn || picking) return <><Welcome /><Toast /></>;
+  // A supplier sees a separate portal with only their own facts. There is no role switch and no internal screen.
+  if (role === "supplier") return (
+    <div className={touring ? "tour-pad" : ""}>
+      <SupplierPortal />
+      {touring && <div aria-hidden className="h-[58vh] lg:hidden" />}
+      {pickerOpen && <TourGuide />}
+      <Toast />
+    </div>
+  );
   return (
     <div className={touring ? "tour-pad" : ""}>
       <TopBar />

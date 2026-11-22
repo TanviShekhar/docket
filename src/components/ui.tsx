@@ -43,6 +43,9 @@ export function Gate({ owner, done, doneNode, children, needsA1 }: { owner: Role
       </div>
     );
   }
+  if (owner === "supplier" && role !== "supplier") {
+    return <p>Waiting for the supplier. They respond from their own portal, which staff cannot switch into.</p>;
+  }
   if (role !== owner) {
     return (
       <div>
@@ -54,4 +57,31 @@ export function Gate({ owner, done, doneNode, children, needsA1 }: { owner: Role
     );
   }
   return <>{children}</>;
+}
+
+// ---------- "See how Docket worked this out": short labelled rows, never run-on paragraphs ----------
+export const HowCard = ({ title, label, children }: { title: string; label?: LabelKind; children: ReactNode }) => (
+  <div>
+    <h3 className="text-base flex flex-wrap items-center gap-2">{title} {label && <Label kind={label} />}</h3>
+    <div className="mt-2 space-y-2.5">{children}</div>
+  </div>
+);
+export const Row = ({ k, children }: { k: string; children: ReactNode }) => (
+  <div><div className="text-xs font-semibold text-[var(--muted)]">{k}</div><div>{children}</div></div>
+);
+export function AiRead({ field, value, confidence, flag, evidenceOk, why, title = "What the AI read", children }: { field?: string; value: ReactNode; confidence: number; flag?: string; evidenceOk: boolean; why?: string; title?: string; children?: ReactNode }) {
+  return (
+    <HowCard title={title} label="ai">
+      {field && <Row k="Field">{field}</Row>}
+      <Row k="Value">{value}</Row>
+      <Row k="Confidence">{Math.round(confidence * 100)}%</Row>
+      {flag && <Row k="Flag">{flag}</Row>}
+      <Row k="Evidence check">
+        <span className={evidenceOk ? "text-ok" : "text-gap"} aria-hidden>{evidenceOk ? "✓" : "✗"}</span> {evidenceOk ? "Quote found in the document" : "Quote not found in the document"}
+        <span className="block text-[var(--muted)]">This proves the quote exists, not that its meaning was read correctly</span>
+      </Row>
+      {why && <Row k="Why">{why}</Row>}
+      {children}
+    </HowCard>
+  );
 }

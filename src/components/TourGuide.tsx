@@ -10,23 +10,35 @@ function Ring({ target, n }: { target?: string; n: number }) {
   const [box, setBox] = useState<Box>(null);
   useEffect(() => {
     if (!target) { setBox(null); return; }
-    let raf = 0, tries = 0, scrolled = false;
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const tick = () => {
+    let raf = 0, timer = 0, tries = 0, scrolled = false;
+        const tick = () => {
       const el = document.querySelector(`[data-tour="${target}"]`) as HTMLElement | null;
       if (el) {
         const r = el.getBoundingClientRect();
-        if (!scrolled) { scrolled = true; el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" }); }
+        if (!scrolled) {
+          scrolled = true;
+          // Bring the area just below the top bar. Opening the guide can make the bar wrap, so the bar is measured
+          // at the moment of scrolling, and a second pass corrects anything that shifted while the page settled.
+          const align = (behavior: ScrollBehavior) => {
+            const node = document.querySelector(`[data-tour="${target}"]`) as HTMLElement | null;
+            if (!node) return;
+            const bar = matchMedia("(min-width: 768px)").matches ? (document.querySelector("header")?.getBoundingClientRect().height ?? 0) : 0;
+            const top = node.getBoundingClientRect().top + window.scrollY - bar - 16;
+            if (behavior === "auto" && node.getBoundingClientRect().top >= bar) return; // already clear of the bar
+            window.scrollTo({ top: Math.max(0, top), behavior });
+          };
+          timer = window.setTimeout(() => { align("auto"); timer = window.setTimeout(() => align("auto"), 500); }, 250); // instant, so a long smooth scroll never ends up in the wrong place
+        }
         setBox((b) => (b && b.x === r.left && b.y === r.top && b.w === r.width && b.h === r.height ? b : { x: r.left, y: r.top, w: r.width, h: r.height }));
       } else if (++tries > 40) setBox(null);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => { cancelAnimationFrame(raf); clearTimeout(timer); };
   }, [target, n]);
   if (!box) return null;
   return (
-    <div aria-hidden className="pointer-events-none fixed z-40" style={{ left: box.x - 8, top: box.y - 8, width: box.w + 16, height: box.h + 16 }}>
+    <div aria-hidden className="pointer-events-none fixed z-30" style={{ left: box.x - 8, top: box.y - 8, width: box.w + 16, height: box.h + 16 }}>
       <div className="absolute inset-0 rounded-xl" style={{ border: "3px solid var(--tour)" }} />
       <div className="absolute -left-3 -top-3 w-7 h-7 rounded-full flex items-center justify-center text-sm font-semibold" style={{ background: "var(--tour)", color: "var(--tourtext)", border: "2px solid var(--bg)" }}>{n}</div>
     </div>
