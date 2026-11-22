@@ -10,6 +10,7 @@ import ReadContract from "../components/ReadContract";
 import FilesBar from "../components/FilesBar";
 import { contractsFile } from "../lib/dataFiles";
 
+const TAG_BADGE: Record<string, string> = { email: "pill-yearly", word: "pill-yearly", drive: "pill-ok", excel: "pill-ok", esign: "pill-wait", scanned: "pill-wait", outside: "pill-wait" };
 const ITEM_FOR_DOC: Record<string, string> = { "TB-MSA": "/item/F", "TB-AMD2": "/item/A1", "CD-SUB": "/item/B1", "SH-MSA": "/item/C1", "PF-AGR": "/item/D", "BL-SL1": "/item/I1", "ZE-Q": "/item/I2" };
 
 function Highlight({ text, words }: { text: string; words: string[] }) {
@@ -63,7 +64,7 @@ export default function Contracts() {
           {counts.map((c) => (
             <button key={c.tag} type="button" aria-pressed={tag === c.tag} onClick={() => setTag(tag === c.tag ? null : c.tag)}
               className={`min-h-[44px] px-3 rounded-lg border text-sm ${tag === c.tag ? "bg-navy text-white border-navy" : "border-[var(--line)]"}`}>
-              {c.label} <span className="num font-semibold">{c.n}</span>
+              {c.label} <span className={`num ml-1 inline-block rounded-full px-2 text-xs font-semibold ${TAG_BADGE[c.tag]}`}>{c.n}</span>
             </button>
           ))}
         </div>
@@ -145,7 +146,7 @@ export default function Contracts() {
             <div key={p.t} className="border border-[var(--line)] rounded-lg p-4">
               <h3 className="text-lg">{p.t} <Label kind="calculated" /></h3>
               <p className="mt-1 text-sm">{p.d}</p>
-              <p className="mt-1 text-sm text-[var(--muted)]">{p.s}</p>
+              <p className="mt-2"><span className={`pill ${/Waiting/.test(p.s) ? "pill-wait" : "pill-ok"}`}>{p.s}</span></p>
               <Link to={p.to} className="inline-flex items-center min-h-[44px] underline">Open</Link>
             </div>
           ))}

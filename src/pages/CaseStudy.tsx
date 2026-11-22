@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SOURCES } from "../lib/data";
 import { ASSUMPTIONS, CONFLICTS, LATER_SYSTEMS, METRICS, OWNERSHIP, PHASES, PRECEDENCE, PROTO_VS_PROD, REAL_VS_SIM, RETHINK, SOURCE_SYSTEMS, STAKEHOLDERS, TRIGGERS } from "../lib/studyData";
@@ -12,37 +12,60 @@ const NAV: [string, string][] = [
 
 function Table({ head, rows, wrap }: { head: string[]; rows: ReactNode[][]; wrap?: boolean }) {
   return (
-    <div className="mt-3 mx-auto overflow-x-auto border border-[var(--line)] rounded-lg">
-      <table className="w-full text-sm">
-        <thead className="text-center text-[var(--muted)]"><tr>{head.map((h) => <th key={h} className="p-2 text-center">{h}</th>)}</tr></thead>
-        <tbody>{rows.map((r, i) => <tr key={i} className="border-t border-[var(--line)] align-top">{r.map((c, j) => <td key={j} className="p-2 text-center">{c}</td>)}</tr>)}</tbody>
+    <div className="mt-3 overflow-x-auto border border-[var(--line)] rounded-lg">
+      <table className="w-full text-sm text-left">
+        <thead className="bg-[var(--panel)]"><tr>{head.map((h) => <th key={h} className="p-2.5 font-semibold border-r border-[var(--line)] last:border-r-0">{h}</th>)}</tr></thead>
+        <tbody>{rows.map((r, i) => <tr key={i} className="border-t border-[var(--line)] align-top">{r.map((c, j) => <td key={j} className="p-2.5 border-r border-[var(--line)] last:border-r-0">{c}</td>)}</tr>)}</tbody>
       </table>
     </div>
   );
 }
-const H2 = ({ id, children }: { id: string; children: ReactNode }) => <h2 id={id} className="text-2xl md:text-3xl scroll-mt-16 text-center border-b border-[var(--line)] pb-3">{children}</h2>;
+const H2 = ({ id, children }: { id: string; children: ReactNode }) => <h2 id={id} className="text-2xl md:text-3xl scroll-mt-16 border-b border-[var(--line)] pb-2">{children}</h2>;
 const H3 = ({ children }: { children: ReactNode }) => <h3 className="mt-6 text-lg">{children}</h3>;
 const Src = ({ n }: { n: number }) => <a href="#/case-study?to=sources" className="underline">Source {n}</a>;
 
 export default function CaseStudy() {
   const { search } = useLocation();
+  const [active, setActive] = useState("why");
   const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   useEffect(() => {
     const to = new URLSearchParams(search).get("to");
     if (to) setTimeout(() => go(to), 50);
   }, [search]);
+  // Highlight the section being read.
+  useEffect(() => {
+    const onScroll = () => {
+      let cur = NAV[0][0];
+      for (const [id] of NAV) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top < 140) cur = id; }
+      setActive(cur);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <main className="pb-10">
-      <nav aria-label="Case analysis sections" className="sticky top-0 z-10 bg-[var(--bg)] border-b border-[var(--line)]">
-        <ul className="page flex gap-1 overflow-x-auto text-sm lg:justify-center">
-          {NAV.map(([id, label]) => <li key={id} className="shrink-0"><button type="button" onClick={() => go(id)} className="min-h-[44px] px-3 hover:underline">{label}</button></li>)}
+      <nav aria-label="Case analysis sections" className="lg:hidden sticky top-0 z-10 bg-[var(--bg)] border-b border-[var(--line)]">
+        <ul className="page flex gap-1 overflow-x-auto text-sm">
+          {NAV.map(([id, label]) => <li key={id} className="shrink-0"><button type="button" onClick={() => go(id)} className={`min-h-[44px] px-3 ${active === id ? "font-semibold underline" : ""}`}>{label}</button></li>)}
         </ul>
       </nav>
-
-      <article className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 space-y-4 leading-relaxed prose-wide">
-        <h1 className="text-3xl md:text-4xl text-center">Clause &amp; Effect: why Docket checks contracts after signature</h1>
-        <p className="text-lg text-center mx-auto">Docket checks that suppliers charge and deliver what the contract promised, and helps people recover the money when they don't.</p>
+      <div className="page lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
+        <aside className="hidden lg:block">
+          <nav aria-label="On this page" className="sticky top-4 mt-8 rounded-xl border border-[var(--line)] bg-[var(--panel)] p-3">
+            <p className="px-2 pb-2 text-xs font-semibold text-[var(--muted)]">On this page</p>
+            <ul className="space-y-0.5">
+              {NAV.map(([id, label]) => (
+                <li key={id}><button type="button" onClick={() => go(id)} aria-current={active === id ? "true" : undefined}
+                  className={`w-full text-left min-h-[36px] px-2 rounded-lg text-sm ${active === id ? "bg-[#1e3f9a] text-white font-semibold" : "hover:bg-[var(--line)]"}`}>{label}</button></li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+      <article className="py-8 space-y-4 leading-relaxed prose-wide min-w-0">
+        <h1 className="text-3xl md:text-4xl">Clause &amp; Effect: why Docket checks contracts after signature</h1>
+        <p className="text-lg">Docket checks that suppliers charge and deliver what the contract promised, and helps people recover the money when they don't.</p>
         <p>Docket is a post-signature contract intelligence layer for Procurement and Finance. It does not claim to invent the category; contract management platforms already work after signature. Its focus is narrow and deep: work out which signed terms actually apply, then check real activity against them.</p>
         <p className="text-sm text-[var(--muted)]">The company using Docket is fictional: Larkspur Technologies Pvt Ltd, 3,000 employees, about 2,500 suppliers.</p>
 
@@ -82,6 +105,8 @@ export default function CaseStudy() {
 
         {/* ---------- 2 ---------- */}
         <div className="pt-8"><H2 id="map">2. Stakeholder map</H2></div>
+        <p>Eight people or teams have a stake in this stage. Docket sits in the middle. The dashed lines are the places where their interests pull against each other.</p>
+        <H3>The map</H3>
         <StakeholderMap />
         <p className="text-sm text-[var(--muted)]">The same content as tables, for anyone who cannot use the map.</p>
         <H3>Who has a stake</H3>
@@ -208,6 +233,7 @@ export default function CaseStudy() {
           <a key="l" href={s.url} target="_blank" rel="noreferrer" className="underline">Open</a>,
         ])} />
       </article>
+      </div>
     </main>
   );
 }

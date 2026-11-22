@@ -58,3 +58,19 @@ td.num, th.num { white-space: nowrap; } /* rupee amounts in tables never wrap */
 /* Form fields use the blue focus ring, never the red one, and never spill outside the field. */
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--tour); outline-offset: 0; }
 :focus-visible { outline-color: var(--tour); }
+
+/* Small coloured pills: green for confirmed, amber for waiting, blue for yearly. */
+.pill { display: inline-block; border: 1px solid; border-radius: 9999px; padding: 0 0.6rem; font-size: 0.8rem; font-weight: 600; line-height: 1.5rem; }
+.pill-ok, .pill-oneoff { background: #dcfce7; color: #14532d; border-color: #86efac; }
+.pill-wait { background: #fef3c7; color: #78350f; border-color: #fcd34d; }
+.pill-yearly { background: #dbeafe; color: #1e3a8a; border-color: #93c5fd; }
+.big-oneoff { color: #15803d; }
+.big-yearly { color: #1d4ed8; }
+@media (prefers-color-scheme: dark) {
+  .pill-ok, .pill-oneoff { background: #0f3d2a; color: #86efac; border-color: #1f7a52; }
+  .pill-wait { background: #43320c; color: #fcd34d; border-color: #8a6a1c; }
+  .pill-yearly { background: #14264f; color: #bfdbfe; border-color: #2f4fa0; }
+  .big-oneoff { color: #5eead4; }
+  .big-yearly { color: #93b4ff; }
+}
+@media (min-width: 1024px) { .item-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 8fr); } }

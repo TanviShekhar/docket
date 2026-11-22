@@ -5,7 +5,7 @@ import { useStore } from "../lib/store";
 import Label, { type LabelKind } from "./Label";
 
 export const Primary = ({ children, onClick, disabled }: { children: ReactNode; onClick: () => void; disabled?: boolean }) => (
-  <button type="button" disabled={disabled} onClick={onClick} className="min-h-[44px] px-4 rounded-lg bg-navy text-white font-semibold disabled:opacity-50">{children}</button>
+  <button type="button" disabled={disabled} onClick={onClick} className="min-h-[44px] px-4 py-2 rounded-lg bg-navy text-white font-semibold text-left leading-snug disabled:opacity-50">{children}</button>
 );
 export const Secondary = ({ children, onClick }: { children: ReactNode; onClick: () => void }) => (
   <button type="button" onClick={onClick} className="min-h-[44px] px-2 underline">{children}</button>

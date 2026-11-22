@@ -22,8 +22,8 @@ export default function StakeholderMap() {
   const [sel, setSel] = useState<number | null>(null);
   const picked = CONFLICTS.find((c) => c.id === sel);
   return (
-    <div className="mx-auto max-w-3xl">
-      <p className="text-sm text-[var(--muted)] text-center">Lines are conflicts. Click or tap a line, or one of the buttons below the map, to see the conflict and how Docket handles it.</p>
+    <div className="max-w-3xl">
+      <p className="text-sm text-[var(--muted)]">Lines are conflicts. Click or tap a line, or one of the buttons below the map, to see the conflict and how Docket handles it.</p>
       <div className="mt-3 overflow-x-auto border border-[var(--line)] rounded-lg">
         <svg viewBox="0 0 700 470" className="min-w-[620px] w-full" role="group" aria-label="Stakeholder map. The same content is in the tables below.">
           {LINES.map((l, i) => {
@@ -47,7 +47,7 @@ export default function StakeholderMap() {
           })}
         </svg>
       </div>
-      <div className="mt-3 flex flex-wrap justify-center gap-2">
+      <div className="mt-3 flex flex-wrap gap-2">
         {CONFLICTS.map((c) => (
           <button key={c.id} type="button" aria-pressed={sel === c.id} onClick={() => setSel(sel === c.id ? null : c.id)}
             className={`min-h-[44px] px-3 rounded-lg border text-sm text-left ${sel === c.id ? "bg-navy text-white border-navy" : "border-[var(--line)]"}`}>{c.title}</button>

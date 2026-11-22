@@ -25,7 +25,7 @@ export default function Today() {
     <main className="page py-6">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center">
         <div>
-          <h1 className="text-3xl md:text-4xl leading-tight">
+          <h1 className="text-2xl md:text-3xl leading-tight">
             Contract says <span className="num">{inr(contractRate())}</span>. Invoice says <span className="num">{inr(invoiceRate())}</span>. Docket finds the gap, proves it and helps you recover it.
           </h1>
           <p className="mt-3 max-w-3xl text-[var(--muted)]">
@@ -36,9 +36,9 @@ export default function Today() {
       </div>
 
       <p data-tour="strip" className="mt-5 text-sm border-y border-[var(--line)] py-3">
-        <span className="font-semibold">Confirmed so far:</span> <span className="num">{both(t.confirmedOneOff, t.confirmedAnnual)}</span>
+        <span className="pill pill-ok">Confirmed so far: <span className="num">{both(t.confirmedOneOff, t.confirmedAnnual)}</span></span>
         <span className="mx-2" aria-hidden>·</span>
-        <span className="font-semibold">In progress:</span> <span className="num">{both(t.progressOneOff, t.progressAnnual)}</span>
+        <span className="pill pill-wait">In progress: <span className="num">{both(t.progressOneOff, t.progressAnnual)}</span></span>
         <span className="mx-2" aria-hidden>·</span>
         <Link to="/value" className="underline">See the Value screen</Link> <Label kind="calculated" />
       </p>

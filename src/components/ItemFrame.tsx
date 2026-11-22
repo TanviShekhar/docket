@@ -19,7 +19,7 @@ export default function ItemFrame(p: { crumb: string; title: string; progress?: 
   return (
     <main className="page py-6">
       <nav className="text-sm"><Link to="/" className="underline">To-do</Link> / {p.crumb}</nav>
-      <h1 className="mt-3 text-2xl md:text-3xl leading-tight max-w-5xl">{p.title}</h1>
+      <h1 className="mt-3 text-xl md:text-[1.7rem] leading-tight max-w-5xl">{p.title}</h1>
       {status && <p className="mt-2 text-sm text-[var(--muted)]">{status}</p>}
       {p.progress && <div className="mt-4" data-tour="progress"><Progress steps={p.progress.steps} doneCount={p.progress.doneCount} /></div>}
 

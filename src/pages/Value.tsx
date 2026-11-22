@@ -25,6 +25,8 @@ function StageTrack({ stage }: { stage: Stage }) {
   );
 }
 
+const Kind = ({ k }: { k: "one-off" | "annual" }) => <span className={`pill ${k === "one-off" ? "pill-oneoff" : "pill-yearly"}`}>{k === "one-off" ? "One-off" : "Every year"}</span>;
+
 const money = (i: ValueItem, capApplies: boolean, decision: string | null) =>
   i.amount === 0 ? (i.id === "B-cap" && !capApplies ? "Not claimable" : decision === "asis" || decision === "dont" ? "No saving" : inr(0)) : inr(i.amount);
 
@@ -42,11 +44,11 @@ export default function Value() {
       <section className="mt-6" aria-labelledby="conf" data-tour="value-big">
         <h2 id="conf" className="text-lg font-semibold">Confirmed value <Label kind="calculated" /></h2>
         <div className="mt-2 flex flex-wrap gap-x-10 gap-y-2">
-          <p><span className="font-display text-4xl font-bold num">{inr(t.confirmedOneOff)}</span> <span className="text-[var(--muted)]">one-off</span></p>
-          <p><span className="font-display text-4xl font-bold num">{inr(t.confirmedAnnual)}</span> <span className="text-[var(--muted)]">a year</span></p>
+          <p><span className="font-display text-4xl font-bold num big-oneoff">{inr(t.confirmedOneOff)}</span> <span className="pill pill-oneoff align-middle">one-off</span></p>
+          <p><span className="font-display text-4xl font-bold num big-yearly">{inr(t.confirmedAnnual)}</span> <span className="pill pill-yearly align-middle">a year</span></p>
         </div>
         <p className="mt-2 text-sm text-[var(--muted)] max-w-3xl">Counted only when Finance records the credit note, offset or signed renewal. GST is not counted. One-off and yearly amounts are never added together.</p>
-        <p className="mt-1 text-sm num">In progress, not counted yet: {inr(t.progressOneOff)} one-off, {inr(t.progressAnnual)} a year.</p>
+        <p className="mt-2 text-sm num"><span className="pill pill-wait">In progress, not counted yet: {inr(t.progressOneOff)} one-off, {inr(t.progressAnnual)} a year</span></p>
       </section>
 
       <section className="mt-10" aria-labelledby="items">
@@ -61,7 +63,7 @@ export default function Value() {
                 <tr key={i.id} className="border-t border-[var(--line)] align-top">
                   <td className="p-2"><Link to={LINK[i.id]} className="underline">{i.label}</Link></td>
                   <td className="p-2">{i.category}</td>
-                  <td className="p-2">{i.kind === "one-off" ? "One-off" : "Every year"}</td>
+                  <td className="p-2"><Kind k={i.kind} /></td>
                   <td className="p-2"><StageTrack stage={i.stage} /></td>
                   <td className={`p-2 text-right num ${i.stage === "Confirmed" ? "text-ok font-semibold" : i.stage === "Unchecked" ? "text-locked" : ""}`}>{money(i, snap.capApplies, snap.renewalDecision)}{i.stage === "Unchecked" && i.amount > 0 ? <span className="block text-xs">possible</span> : null}</td>
                   <td className="p-2">{i.stage === "Confirmed" ? "Done" : WHAT[i.id]}</td>
@@ -81,7 +83,7 @@ export default function Value() {
               <thead className="text-left text-[var(--muted)]"><tr><th className="p-2">Category</th><th className="p-2 text-right">Confirmed</th><th className="p-2 text-right">In progress</th></tr></thead>
               <tbody>{b.byCategory.map((c) => (
                 <tr key={c.category} className="border-t border-[var(--line)]">
-                  <td className="p-2">{c.category}{c.kind ? <span className="block text-xs text-[var(--muted)]">{c.kind === "one-off" ? "One-off" : "Every year"}</span> : null}</td>
+                  <td className="p-2">{c.category}{c.kind ? <span className="block mt-1"><Kind k={c.kind} /></span> : null}</td>
                   <td className="p-2 text-right num">{inr(c.confirmed)}</td><td className="p-2 text-right num">{inr(c.progress)}</td>
                 </tr>))}</tbody>
             </table>
@@ -94,7 +96,7 @@ export default function Value() {
               <thead className="text-left text-[var(--muted)]"><tr><th className="p-2">Type</th><th className="p-2 text-right">Confirmed</th><th className="p-2 text-right">In progress</th></tr></thead>
               <tbody>{b.byKind.map((k) => (
                 <tr key={k.kind} className="border-t border-[var(--line)]">
-                  <td className="p-2">{k.kind === "one-off" ? "One-off" : "Every year"}</td>
+                  <td className="p-2"><Kind k={k.kind} /></td>
                   <td className="p-2 text-right num">{inr(k.confirmed)}</td><td className="p-2 text-right num">{inr(k.progress)}</td>
                 </tr>))}</tbody>
             </table>

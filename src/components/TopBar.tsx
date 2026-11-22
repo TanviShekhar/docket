@@ -51,11 +51,14 @@ export default function TopBar() {
         </div>
       </div>
       {confirming && (
-        <div className="bg-white text-[#101828] border-b border-[#e4e7ee]">
-          <div className="page py-3 flex flex-wrap items-center gap-3 text-sm">
-            <span>Reset the demo to its starting state? Everything you changed is cleared.</span>
-            <button className="min-h-[44px] px-3 rounded-lg bg-navy text-white" type="button" onClick={() => { reset(); useTour.getState().end(); setConfirming(false); }}>Yes, reset</button>
-            <button className="min-h-[44px] px-3 rounded-lg underline" type="button" onClick={() => setConfirming(false)}>Keep my changes</button>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-label="Reset the demo">
+          <div className="w-full max-w-sm rounded-2xl bg-[var(--bg)] text-[var(--text)] border border-[var(--line)] p-6">
+            <h2 className="text-xl">Reset the demo?</h2>
+            <p className="mt-2 text-sm text-[var(--muted)]">Everything you changed goes back to the start: steps done, notices, and choices. You stay signed in.</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button className="min-h-[44px] px-4 rounded-lg bg-navy text-white font-semibold" type="button" onClick={() => { reset(); useTour.getState().end(); setConfirming(false); }}>Yes, reset</button>
+              <button className="min-h-[44px] px-4 rounded-lg border border-[var(--line)]" type="button" onClick={() => setConfirming(false)}>Keep my changes</button>
+            </div>
           </div>
         </div>
       )}
