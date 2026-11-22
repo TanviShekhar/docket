@@ -97,3 +97,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px
 :root[data-theme="dark"] .tint-green { background: #0f2e22; border-color: #1f7a52 !important; color: #bbf7d0; }
 :root[data-theme="dark"] .tint-amber { background: #33270c; border-color: #8a6a1c !important; color: #fde68a; }
 :root[data-theme="dark"] .tint-blue { background: #14223f; border-color: #2f4fa0; color: #dbeafe; }
+
+/* Timeline urgency: red decide now, grey finished or past. */
+.urg-now { display: inline-block; border: 1px solid; border-radius: 9999px; padding: 0 0.6rem; font-size: 0.8rem; font-weight: 600; line-height: 1.5rem; background: #fee2e2; color: #7f1d1d; border-color: #fca5a5; }
+.urg-grey { display: inline-block; border: 1px solid; border-radius: 9999px; padding: 0 0.6rem; font-size: 0.8rem; font-weight: 600; line-height: 1.5rem; background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
+:root[data-theme="dark"] .urg-now { background: #4a1414; color: #fecaca; border-color: #9a3232; }
+:root[data-theme="dark"] .urg-grey { background: #262b36; color: #cbd5e1; border-color: #475569; }

@@ -8,6 +8,7 @@ import { useStore } from "../lib/store";
 import Label from "../components/Label";
 import ReadContract from "../components/ReadContract";
 import FilesBar from "../components/FilesBar";
+import Timeline from "../components/Timeline";
 import { contractsFile } from "../lib/dataFiles";
 
 const TAG_BADGE: Record<string, string> = { email: "pill-yearly", word: "pill-yearly", drive: "pill-ok", excel: "pill-ok", esign: "pill-wait", scanned: "pill-wait", outside: "pill-wait" };
@@ -38,6 +39,7 @@ export default function Contracts() {
   const snap = useStore();
   const all = rows(snap);
   const counts = tagCounts(all);
+  const [view, setView] = useState<"docs" | "timeline">("docs");
   const [tag, setTag] = useState<Tag | null>(null);
   const [qid, setQid] = useState<string | null>(null);
   const [q, setQ] = useState("");
@@ -57,6 +59,13 @@ export default function Contracts() {
     <main className="page py-8">
       <h1 className="text-3xl md:text-4xl">Contracts</h1>
       <p className="mt-2 text-[var(--muted)] max-w-3xl">Every contract Docket has found, where it came from, and what it says. Nothing here is typed by hand: counts and answers are worked out from the documents.</p>
+      <div role="tablist" aria-label="Contracts views" className="mt-5 flex gap-2">
+        {([["docs", "Documents"], ["timeline", "Timeline"]] as const).map(([k, l]) => (
+          <button key={k} type="button" role="tab" aria-selected={view === k} onClick={() => setView(k)}
+            className={`min-h-[44px] px-4 rounded-lg border text-sm font-semibold ${view === k ? "bg-navy text-white border-navy" : "border-[var(--line)]"}`}>{l}</button>
+        ))}
+      </div>
+      {view === "timeline" ? <Timeline /> : (<>
 
       <section className="mt-8" aria-labelledby="found">
         <h2 id="found" className="text-2xl">Where Docket found your contracts <Label kind="simulated" source="Shared drives, email, e-signature platform and the Excel tracker" /></h2>
@@ -186,6 +195,7 @@ export default function Contracts() {
         </div>
       </section>
       <FilesBar files={[contractsFile(snap)]} />
+      </>)}
     </main>
   );
 }
