@@ -23,7 +23,7 @@ export default function ReadContract() {
               {MESSY_RUN.map((f, i) => (
                 <li key={i}>
                   <p className="font-semibold">{f.field}: {f.value}</p>
-                  <p className="text-[var(--muted)]">"{f.quote}" Confidence {Math.round(f.confidence * 100)}%.{f.flag ? ` Flag: ${f.flag}` : ""}</p>
+                  <p className="text-[var(--muted)]">"{f.quote}" Confidence {Math.round(f.confidence * 100)}%{f.flag ? ` · Flag: ${f.flag}` : ""}</p>
                   <p><span aria-hidden className={grounded(text, f.quote) ? "text-ok" : "text-gap"}>{grounded(text, f.quote) ? "✓" : "✗"}</span> {grounded(text, f.quote) ? "Quote found in the text. This proves the quote exists, not that its meaning was read correctly." : "Quote not found in the text."}</p>
                 </li>
               ))}

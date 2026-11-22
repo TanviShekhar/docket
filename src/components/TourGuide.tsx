@@ -116,7 +116,7 @@ export default function TourGuide() {
               {s.points && (
                 <dl className="space-y-2 text-sm">
                   {s.points.map(([k, v]) => (
-                    <div key={k} className="rounded-lg border border-[var(--line)] p-2"><dt className="font-semibold">{k}</dt><dd className="text-[var(--muted)]">{v}</dd></div>
+                    <div key={k} className="rounded-lg border border-[var(--line)] p-2"><dt className="font-semibold">{k}</dt><dd className="text-[var(--muted)]">{Array.isArray(v) ? v.map((l) => <p key={l} className="mt-1">{l}</p>) : v}</dd></div>
                   ))}
                 </dl>
               )}

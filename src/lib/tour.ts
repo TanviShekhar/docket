@@ -10,7 +10,7 @@ import type { Role } from "./data";
 export interface TourStep {
   title: string;
   text: string;
-  points?: [string, string][]; // what each part of the highlighted area means
+  points?: [string, string | string[]][]; // what each part of the highlighted area means
   route: string;
   target?: string; // data-tour name of the area to ring
   role?: Role;
@@ -29,8 +29,12 @@ export const CHAPTERS: Chapter[] = [
     name: "Invoice", blurb: "Find an overcharge, prove it, recover it. About 2 minutes.", end: "That's the core loop: find the gap, prove it, recover it, stop it repeating.",
     steps: [
       { title: "The story", route: "/", target: "gap", role: "finance",
-        text: `A staffing supplier, TalentBridge, billed ${billed} an hour. The signed contract says ${rate} an hour.`,
-        points: [["What happened", `The invoice charged ${billed}/hr. A change to the contract (Amendment 2) cut the rate to ${rate}/hr from 1 October, and the invoice did not follow it.`], ["What should have happened", `Finance pays ${rate}/hr. The extra ${gap} on one invoice line never leaves the company.`], ["How Docket points it out", "It reads the contract family, works out which rate applies, checks the invoice against it, and sends the gap to the person who can act."]] },
+        text: `A staffing supplier, TalentBridge, billed ${billed}/hr. The signed contract says ${rate}/hr.`,
+        points: [
+          ["What happened", [`The invoice charged ${billed}/hr.`, `A change to the contract (Amendment 2) cut the rate to ${rate}/hr from 1 October.`, "The invoice did not follow it."]],
+          ["What should have happened", [`Finance pays ${rate}/hr.`, `The extra ${gap} on one line never leaves the company.`]],
+          ["How Docket points it out", ["Reads the contract family.", "Works out which rate applies.", "Checks the invoice against it.", "Sends the gap to the person who can act."]],
+        ] },
       { title: "The invoice, line by line", route: "/item/A2", target: "proof", role: "finance",
         text: "You are Finance. Docket checked every line of the invoice against the contracts.",
         points: [["Tick marks", "Four basic checks passed: not a duplicate, right company, right purchase orders, right currency."], ["Matches", "The line is billed at the rate in force."], ["Locked", "Line 1 depends on a new rate that Legal has not checked, so nobody can dispute it yet."], ["Docket needs your answer", "Line 4 uses a role name that is not on the rate card."]] },
@@ -98,7 +102,7 @@ export const CHAPTERS: Chapter[] = [
     ],
   },
   {
-    name: "One source of truth", blurb: "Which file counts, what the tracker got wrong, who was never contracted.", end: "Read the case study to see why this stage, who it is for, and how success is measured.",
+    name: "One source of truth", blurb: "Which file counts, what the tracker got wrong, who was never contracted.", end: "Read the case analysis to see why this stage, who it is for, and how success is measured.",
     steps: [
       { title: "Four files, one contract", route: "/item/F", target: "proof", role: "legal", isDone: (s) => !!s.done.F, run: () => st().confirmSigned(),
         text: "The same main contract exists as Word drafts and a signed PDF. Only the one signed by both parties, with an e-signature record, counts." },
@@ -109,7 +113,7 @@ export const CHAPTERS: Chapter[] = [
         text: "Suppliers paid this year with no contract in Docket. Most money is covered, but not most suppliers." },
       { title: "A side letter in someone's inbox", route: "/item/I1", target: "proof", role: "legal", isDone: (s) => !!s.done.I1, run: () => st().addBrightline(),
         text: "A signed discount was found in an email. Adding it changes the fee in force for October to December, and January goes back to normal." },
-      { title: "Now the case study", route: "/case-study", text: "Why this stage, who it is for, the problem, and how success is measured. This page is part of the submission, not part of the product." },
+      { title: "Now the case analysis", route: "/case-study", text: "Why this stage, who it is for, the problem, and how success is measured. This page is part of the submission, not part of the product." },
     ],
   },
 ];

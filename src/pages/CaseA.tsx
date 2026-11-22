@@ -89,14 +89,13 @@ function A1() {
         <Done>{rejected ? `Legal did not accept this reading. Reason: ${snap.rejectReason.A1}. The invoice line is not being disputed. Finance has been told.`
           : `Checked by ${PEOPLE.legal.name}, Legal. Finance has been told. The invoice line is now a ${inr(line.diff ?? 0)} overcharge.`}</Done>}>
         <Primary onClick={() => run(snap.confirmRate)}>Confirm {inr(f.rate)} for SOW-1</Primary>
-        <Secondary onClick={() => setOpen(!open)}>This is wrong</Secondary>
-        {open && (
-          <div className="mt-3">
-            <label htmlFor="why" className="block text-sm">What is wrong with this reading?</label>
-            <textarea id="why" value={reason} onChange={(e) => setReason(e.target.value)} rows={3} className="mt-1 w-full border border-[var(--line)] rounded-lg p-2 bg-transparent" />
-            <div className="mt-2"><Primary disabled={!reason.trim()} onClick={() => run(() => snap.rejectRate(reason.trim()))}>Send reason</Primary></div>
-          </div>
-        )}
+        <div className="mt-4 rounded-xl border border-[var(--line)] p-3">
+          <label htmlFor="why" className="block font-semibold">Does this reading look wrong?</label>
+          <p className="text-sm text-[var(--muted)]">If so, say why. Finance is told and the invoice line is not disputed.</p>
+          <textarea id="why" value={reason} onChange={(e) => { setReason(e.target.value); setOpen(false); }} rows={2} placeholder="For example: the change should also cover SOW-2" className="mt-2 w-full border border-[var(--line)] rounded-lg p-2 bg-transparent text-sm" />
+          {open && <p role="alert" className="mt-1 text-sm text-gap">Write a short reason first.</p>}
+          <div className="mt-2"><Secondary onClick={() => (reason.trim() ? run(() => snap.rejectRate(reason.trim())) : setOpen(true))}>Send reason</Secondary></div>
+        </div>
       </Gate>}
       how={<>
         <div>
@@ -107,7 +106,7 @@ function A1() {
         </div>
         <div>
           <h3 className="text-base">What the AI read <Label kind="ai" /></h3>
-          <p>Field: {ai.field}. Value: {ai.value}. Confidence: {Math.round(ai.confidence * 100)}%.</p>
+          <p>Field: {ai.field}. Value: {ai.value}. Confidence: {Math.round(ai.confidence * 100)}%</p>
           <p>Evidence check: {grounded(amdText, ai.quote) ? "Quote found in the document." : "Quote NOT found in the document."} This proves the quote exists, not that its meaning was read correctly.</p>
           <p>Why: {j.why}</p>
           <details><summary className="cursor-pointer min-h-[44px] flex items-center">Show the prompt</summary><pre className="whitespace-pre-wrap text-xs">{EXTRACTION_PROMPT}</pre></details>
@@ -151,7 +150,7 @@ function A3() {
         <ProofCard title="Timesheet says" label={{ kind: "simulated", source: "Timesheet system" }}>
           <p>{l.suggest!.why}</p>
           <p className="num">{approved} approved hours for Senior Developers in October. {f.inv.lines[0].qty + l.qty} billed.</p>
-          <p><Label kind="ai" /> {j.output}</p>
+          <p><Label kind="ai" /> {j.output.replace(/\.$/, "")}</p>
         </ProofCard>
       </div>}
       action={<Gate owner="finance" needsA1 done={!!snap.done.A3} doneNode={<Done>{snap.mapConfirmed.L4 ? `Confirmed by ${PEOPLE.finance.name}: line 4 is a Senior Developer.` : `${PEOPLE.finance.name} said no. Line 4 stays out of the dispute until the supplier explains the role.`}</Done>}>

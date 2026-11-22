@@ -81,7 +81,7 @@ function B1() {
         <Secondary onClick={() => run(() => snap.decideCap(false))}>Exception applies</Secondary>
       </Gate>}
       how={<>
-        <div><h3 className="text-base">What the AI read <Label kind="ai" /></h3><p>{ai.field}: {ai.value}. Confidence {Math.round(ai.confidence * 100)}%. Flag: {ai.flag}</p>
+        <div><h3 className="text-base">What the AI read <Label kind="ai" /></h3><p>{ai.field}: {ai.value}. Confidence {Math.round(ai.confidence * 100)}% · Flag: {ai.flag}</p>
           <p>Evidence check: {grounded(text, ai.quote) ? "Quote found in the document." : "Quote NOT found."} This proves the quote exists, not that its meaning was read correctly.</p><p>Why: {j.why}</p></div>
         <div><h3 className="text-base">The calculation <Label kind="calculated" /></h3>
           <p className="num">At the quote: {inr(f.rm.asQuote)}. At the cap: {inr(cdFacts({ ...snap, capApplies: true }).rm.atCap)}. Cap saving: {inr(cdFacts({ ...snap, capApplies: true }).rm.capSaving)} a year.</p></div></>} />
@@ -217,7 +217,7 @@ function C1() {
         <Primary onClick={() => run(snap.confirmSla)}>Confirm clause</Primary>
       </Gate>}
       how={<>{AI_RUNS["SH-MSA"].map((a) => (
-        <div key={a.field}><h3 className="text-base">{a.field} <Label kind="ai" /></h3><p>{a.value}. Confidence {Math.round(a.confidence * 100)}%.{a.flag ? ` Flag: ${a.flag}` : ""}</p>
+        <div key={a.field}><h3 className="text-base">{a.field} <Label kind="ai" /></h3><p>{a.value}. Confidence {Math.round(a.confidence * 100)}%{a.flag ? ` · Flag: ${a.flag}` : ""}</p>
           <p>Evidence check: {grounded(text, a.quote) ? "Quote found in the document." : "Quote NOT found."} This proves the quote exists, not that its meaning was read correctly.</p></div>
       ))}</>} />
   );

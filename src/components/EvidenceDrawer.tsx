@@ -49,7 +49,7 @@ export default function EvidenceDrawer({ term, cands, onClose }: { term: Term; c
         <section>
           <h3 className="text-base">What the AI read <Label kind="ai" /></h3>
           {ai ? (<>
-            <p>{ai.field}: {ai.value}. Confidence {Math.round(ai.confidence * 100)}%.{ai.flag ? ` Flag: ${ai.flag}` : ""}</p>
+            <p>{ai.field}: {ai.value}. Confidence {Math.round(ai.confidence * 100)}%{ai.flag ? ` · Flag: ${ai.flag}` : ""}</p>
             <p className="mt-1">Evidence check: {grounded(text, ai.quote) ? "Quote found in the document." : "Quote NOT found in the document."} This proves the quote exists, not that its meaning was read correctly.</p>
           </>) : <p>No recorded AI run for this term.</p>}
         </section>

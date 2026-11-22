@@ -6,21 +6,21 @@ import { LABEL_KINDS, NAME, TEXT } from "../components/Label";
 import StakeholderMap from "../components/StakeholderMap";
 
 const NAV: [string, string][] = [
-  ["why", "1 Why this stage"], ["map", "2 Stakeholder map"], ["problem", "3 The problem"], ["prototype", "4 The prototype"], ["metrics", "5 Success metrics"],
+  ["why", "1. Why this stage"], ["map", "2. Stakeholder map"], ["problem", "3. The problem"], ["prototype", "4. The prototype"], ["metrics", "5. Success metrics"],
   ["built", "How it's built"], ["assumptions", "Assumptions"], ["sources", "Sources"],
 ];
 
 function Table({ head, rows, wrap }: { head: string[]; rows: ReactNode[][]; wrap?: boolean }) {
   return (
-    <div className="mt-3 overflow-x-auto border border-[var(--line)] rounded-lg">
+    <div className="mt-3 mx-auto overflow-x-auto border border-[var(--line)] rounded-lg">
       <table className="w-full text-sm">
-        <thead className="text-left text-[var(--muted)]"><tr>{head.map((h) => <th key={h} className="p-2">{h}</th>)}</tr></thead>
-        <tbody>{rows.map((r, i) => <tr key={i} className="border-t border-[var(--line)] align-top">{r.map((c, j) => <td key={j} className={`p-2 ${wrap ? "" : ""}`}>{c}</td>)}</tr>)}</tbody>
+        <thead className="text-center text-[var(--muted)]"><tr>{head.map((h) => <th key={h} className="p-2 text-center">{h}</th>)}</tr></thead>
+        <tbody>{rows.map((r, i) => <tr key={i} className="border-t border-[var(--line)] align-top">{r.map((c, j) => <td key={j} className="p-2 text-center">{c}</td>)}</tr>)}</tbody>
       </table>
     </div>
   );
 }
-const H2 = ({ id, children }: { id: string; children: ReactNode }) => <h2 id={id} className="text-2xl md:text-3xl scroll-mt-16">{children}</h2>;
+const H2 = ({ id, children }: { id: string; children: ReactNode }) => <h2 id={id} className="text-2xl md:text-3xl scroll-mt-16 text-center border-b border-[var(--line)] pb-3">{children}</h2>;
 const H3 = ({ children }: { children: ReactNode }) => <h3 className="mt-6 text-lg">{children}</h3>;
 const Src = ({ n }: { n: number }) => <a href="#/case-study?to=sources" className="underline">Source {n}</a>;
 
@@ -34,15 +34,15 @@ export default function CaseStudy() {
 
   return (
     <main className="pb-10">
-      <nav aria-label="Case study sections" className="sticky top-0 z-10 bg-[var(--bg)] border-b border-[var(--line)]">
-        <ul className="page flex gap-1 overflow-x-auto text-sm">
+      <nav aria-label="Case analysis sections" className="sticky top-0 z-10 bg-[var(--bg)] border-b border-[var(--line)]">
+        <ul className="page flex gap-1 overflow-x-auto text-sm lg:justify-center">
           {NAV.map(([id, label]) => <li key={id} className="shrink-0"><button type="button" onClick={() => go(id)} className="min-h-[44px] px-3 hover:underline">{label}</button></li>)}
         </ul>
       </nav>
 
-      <article className="page py-8 space-y-4 leading-relaxed prose-wide">
-        <h1 className="text-3xl md:text-4xl">Clause &amp; Effect: why Docket checks contracts after signature</h1>
-        <p className="text-lg">Docket checks that suppliers charge and deliver what the contract promised, and helps people recover the money when they don't.</p>
+      <article className="mx-auto w-full max-w-6xl px-4 sm:px-6 py-8 space-y-4 leading-relaxed prose-wide">
+        <h1 className="text-3xl md:text-4xl text-center">Clause &amp; Effect: why Docket checks contracts after signature</h1>
+        <p className="text-lg text-center mx-auto">Docket checks that suppliers charge and deliver what the contract promised, and helps people recover the money when they don't.</p>
         <p>Docket is a post-signature contract intelligence layer for Procurement and Finance. It does not claim to invent the category; contract management platforms already work after signature. Its focus is narrow and deep: work out which signed terms actually apply, then check real activity against them.</p>
         <p className="text-sm text-[var(--muted)]">The company using Docket is fictional: Larkspur Technologies Pvt Ltd, 3,000 employees, about 2,500 suppliers.</p>
 

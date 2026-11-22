@@ -28,7 +28,7 @@ function PrimeFacility() {
       what={<p>Docket cannot measure "prompt response", so it cannot say when PrimeFacility is late or calculate a credit. This is a "no way to measure this" term.</p>}
       proof={<div className="grid gap-3 sm:grid-cols-2">
         <ProofCard title="Contract says"><Quote text={c.text} from={`Facilities Management Agreement, page ${c.page}, clause ${c.ref}`} /></ProofCard>
-        <ProofCard title="Docket found"><p>No number of hours or days, and no way to measure a response.</p><p className="text-[var(--muted)]">{term.why}</p><p><Label kind="ai" /> Confidence {Math.round(ai.confidence * 100)}%. {ai.flag}</p></ProofCard>
+        <ProofCard title="Docket found"><p>No number of hours or days, and no way to measure a response.</p><p className="text-[var(--muted)]">{term.why}</p><p><Label kind="ai" /> Confidence {Math.round(ai.confidence * 100)}% · {ai.flag}</p></ProofCard>
       </div>}
       action={<Gate owner="legal" done={!!snap.done.D} doneNode={<Done>Added to the renegotiation list for {renewMonth}. Nothing else is needed now.</Done>}>
         <Primary onClick={() => show(snap.addRenegotiation())}>Add to the renegotiation list for {renewMonth}</Primary>

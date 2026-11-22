@@ -157,7 +157,7 @@ function Brightline() {
       proof={<div className="space-y-3">
         <div className="grid gap-3 sm:grid-cols-2">
           <ProofCard title="Side letter says"><Quote text={c.text} from={`Side letter, page ${c.page}, clause ${c.ref}. ${doc.source}`} />
-            <p><Label kind="ai" /> {ai.value}. Confidence {Math.round(ai.confidence * 100)}%.</p></ProofCard>
+            <p><Label kind="ai" /> {ai.value}. Confidence {Math.round(ai.confidence * 100)}%</p></ProofCard>
           <ProofCard title="Fee in force" label={{ kind: "calculated" }}>
             <p className="num">Oct to Dec, without the letter: {inr(f.before)} a month</p>
             <p className="num">Oct to Dec, with the letter: {inr(f.withLetter)} a month</p>
@@ -168,10 +168,13 @@ function Brightline() {
       </div>}
       action={<Gate owner="legal" done={!!snap.done.I1} doneNode={<Done>{rejected ? `Legal said this is not a valid contract. Reason: ${rejected}.` : `Added to Brightline's contract family. The fee in force for October to December is now ${inr(f.during)} a month. January returns to ${inr(f.january)}. Finance has been told.`}</Done>}>
         <Primary onClick={() => show(snap.addBrightline())}>Add to Brightline's contract family</Primary>
-        <Secondary onClick={() => setOpen(!open)}>Not a valid contract</Secondary>
-        {open && <div className="mt-3"><label htmlFor="why" className="block text-sm">Why is it not valid?</label>
-          <textarea id="why" value={reason} onChange={(e) => setReason(e.target.value)} rows={3} className="mt-1 w-full border border-[var(--line)] rounded-lg p-2 bg-transparent" />
-          <div className="mt-2"><Primary disabled={!reason.trim()} onClick={() => show(snap.rejectBrightline(reason.trim()))}>Send reason</Primary></div></div>}
+        <div className="mt-4 rounded-xl border border-[var(--line)] p-3">
+          <label htmlFor="why" className="block font-semibold">Does this look like it is not a valid contract?</label>
+          <p className="text-sm text-[var(--muted)]">If so, say why. It stays outside Brightline's contract family.</p>
+          <textarea id="why" value={reason} onChange={(e) => { setReason(e.target.value); setOpen(false); }} rows={2} placeholder="For example: it was never signed by Brightline" className="mt-2 w-full border border-[var(--line)] rounded-lg p-2 bg-transparent text-sm" />
+          {open && <p role="alert" className="mt-1 text-sm text-gap">Write a short reason first.</p>}
+          <div className="mt-2"><Secondary onClick={() => (reason.trim() ? show(snap.rejectBrightline(reason.trim())) : setOpen(true))}>Send reason</Secondary></div>
+        </div>
       </Gate>}
       how={<><p>{added ? "The letter is now filed, so it counts." : "Until Legal adds it, the letter does not count."} Docket checked the term dates: it starts {dmy(TERMS.find((t) => t.id === "t13")!.from)} and ends {dmy(TERMS.find((t) => t.id === "t13")!.to!)}.</p>
         <p>Evidence check: {grounded(doc.clauses.map((x) => x.text).join("\n"), ai.quote) ? "Quote found in the document." : "Quote NOT found."} This proves the quote exists, not that its meaning was read correctly. <Label kind="ai" /></p></>} />
@@ -191,7 +194,7 @@ function Zenith() {
       title="Docket found a signed Zenith Events quote in a personal folder."
       what={<p>The quote was signed by both parties on {dmy(doc.signed!)} but never filed. It covers three offsites at {inr(TERMS.find((t) => t.id === "t14")!.value as number)} each.</p>}
       proof={<div className="grid gap-3 sm:grid-cols-2">
-        <ProofCard title="Quote says"><Quote text={c.text} from={`Signed quote, page ${c.page}, clause ${c.ref}. ${doc.source}`} /><p><Label kind="ai" /> {ai.value}. Confidence {Math.round(ai.confidence * 100)}%.</p></ProofCard>
+        <ProofCard title="Quote says"><Quote text={c.text} from={`Signed quote, page ${c.page}, clause ${c.ref}. ${doc.source}`} /><p><Label kind="ai" /> {ai.value}. Confidence {Math.round(ai.confidence * 100)}%</p></ProofCard>
         <ProofCard title="Payments say" label={{ kind: "simulated", source: "ERP purchase orders" }}><p>{spend.name}: {spend.how}, {inr(spend.amount)} this year.</p>
           <p className="num">Suppliers with a contract in Docket: {without.covered} of {without.paid} now, {coverage({ "ZE-Q": true }).covered} of {without.paid} once this is added.</p></ProofCard>
       </div>}

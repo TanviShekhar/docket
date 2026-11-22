@@ -51,3 +51,10 @@ td.num, th.num { white-space: nowrap; } /* rupee amounts in tables never wrap */
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 
 .prose-wide p, .prose-wide li { max-width: 100ch; }
+
+/* The golden box marks "the idea" or "the story": the thing to read first. */
+.story-box { background: #fdf0d2; border: 1px solid #e0a63a; color: #3b2a06; border-radius: 14px; }
+@media (prefers-color-scheme: dark) { .story-box { background: #3a2a0c; border-color: #b8892f; color: #ffe7b0; } }
+/* Form fields use the blue focus ring, never the red one, and never spill outside the field. */
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--tour); outline-offset: 0; }
+:focus-visible { outline-color: var(--tour); }
