@@ -16,6 +16,7 @@ export interface DocketEvent { at: string; role: Role; person: string; action: s
 
 export interface Snapshot {
   role: Role;
+  signedIn: boolean; // the simulated sign-in on the welcome screen
   done: Record<string, boolean>; // step id, for example "A1"
   termState: Record<string, TrustState>;
   mapConfirmed: Record<string, string | false>;
@@ -41,7 +42,7 @@ export interface Snapshot {
 }
 
 const initial: Snapshot = {
-  role: "finance", done: {}, termState: {}, mapConfirmed: {}, expenseApproved: {}, expenseDisputed: false, addedDocs: {},
+  role: "finance", signedIn: false, done: {}, termState: {}, mapConfirmed: {}, expenseApproved: {}, expenseDisputed: false, addedDocs: {},
   notices: [], events: [], rejectReason: {}, supplierReply: null, replyResent: false, fmAccepted: false, capApplies: true, seats: null,
   importance: "Medium", renewalDecision: null, trackingNo: "", cdReply: false, shReply: false,
   trackerFixed: {}, requested: {}, rejectedDocs: {},
@@ -49,6 +50,8 @@ const initial: Snapshot = {
 
 interface Actions {
   setRole: (r: Role) => void;
+  signIn: (r: Role) => void;
+  signOut: () => void;
   dismissNotice: (id: string) => void;
   // Case A. Each returns the toast text.
   confirmRate: () => string; // A1
@@ -118,6 +121,8 @@ export const useStore = create<Snapshot & Actions>()(
       return {
         ...initial,
         setRole: (role) => set({ role }),
+        signIn: (role) => set({ signedIn: true, role }),
+        signOut: () => set({ signedIn: false }),
         dismissNotice: (id) => set((s) => ({ notices: s.notices.filter((n) => n.id !== id) })),
 
         confirmRate: () => {
@@ -198,7 +203,7 @@ export const useStore = create<Snapshot & Actions>()(
           const s = get();
           const label = d === "renegotiate" ? `Chose to renegotiate at ${seatsFor(s)} seats` : d === "asis" ? "Chose to renew as quoted" : "Chose not to renew";
           commit({ ...markDone("B2", d === "asis" ? { done: { ...get().done, B2: true, B3: true, B4: true } } : {}), renewalDecision: d }, "owner", label, `Usage and savings shown (importance: ${s.importance})`,
-            d === "asis" ? [] : [(n) => ({ id: "n-B2", to: "procurement", from: "Arjun Mehta", link: "/item/B3", text: `${label.toLowerCase()}. Send the notice by courier. It must reach CloudDesk by ${dmy(cdFacts(n).dates.notice)}.` })], "B");
+            d === "asis" ? [] : [(n) => ({ id: "n-B2", to: "procurement", from: "Anuj Shinde", link: "/item/B3", text: `${label.toLowerCase()}. Send the notice by courier. It must reach CloudDesk by ${dmy(cdFacts(n).dates.notice)}.` })], "B");
           return d === "asis" ? "Done. The renewal is recorded." : "Done. Procurement has been told.";
         },
         dispatchNotice: (trackingNo) => {
@@ -269,7 +274,7 @@ export const useStore = create<Snapshot & Actions>()(
             () => ({ id: "n-E", to: "procurement", from: "Finance", text: "a new contract request for Northstar Advisory LLP is waiting in intake." })], "E");
           return "Done. Procurement has been told.";
         },
-        reset: () => { set({ ...initial }); useToast.getState().hide(); },
+        reset: () => { set({ ...initial, signedIn: true }); useToast.getState().hide(); },
       };
     },
     { name: "docket-v1" }

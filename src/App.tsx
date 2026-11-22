@@ -6,14 +6,20 @@ import Contracts from "./pages/Contracts";
 import Supplier from "./pages/Supplier";
 import Value from "./pages/Value";
 import CaseStudy from "./pages/CaseStudy";
+import Welcome, { usePicking } from "./pages/Welcome";
 import Toast from "./components/Toast";
-import TourCard from "./components/TourCard";
+import TourGuide from "./components/TourGuide";
+import { useStore } from "./lib/store";
 import { useTour } from "./lib/tour";
 
 export default function App() {
-  const touring = useTour((t) => t.open);
+  const signedIn = useStore((s) => s.signedIn);
+  const picking = usePicking((s) => s.picking);
+  const touring = useTour((t) => t.chapter !== null);
+  const pickerOpen = useTour((t) => t.open);
+  if (!signedIn || picking) return <><Welcome /><Toast /></>;
   return (
-    <>
+    <div className={touring ? "tour-pad" : ""}>
       <TopBar />
       <Routes>
         <Route path="/" element={<Today />} />
@@ -23,13 +29,13 @@ export default function App() {
         <Route path="/value" element={<Value />} />
         <Route path="/case-study" element={<CaseStudy />} />
       </Routes>
-      <footer className="mx-auto max-w-6xl px-4 py-6 text-sm text-[var(--muted)]">
+      <footer className="page py-6 text-sm text-[var(--muted)]">
         Docket is a prototype. All companies, people and data are fictional. Demo date Mon 23 Nov 2026.{" "}
-        <a className="underline" href="#/case-study?to=assumptions">See assumptions.</a>
+        <a className="underline" href="#/case-study?to=assumptions">See the assumptions</a> <span className="chip-assume">A1 to A10</span>
       </footer>
-      {touring && <div aria-hidden className="h-60 sm:h-44" />}
-      <TourCard />
+      {touring && <div aria-hidden className="h-[58vh] lg:hidden" />}
+      {pickerOpen && <TourGuide />}
       <Toast />
-    </>
+    </div>
   );
 }

@@ -45,7 +45,7 @@ export default function Supplier() {
   const [date, setDate] = useState(DEMO_TODAY);
   const [open, setOpen] = useState<string | null>(null);
   const [upload, setUpload] = useState<string | null>(null);
-  if (!sup) return <main className="mx-auto max-w-3xl px-4 py-8"><Link to="/contracts" className="underline">Contracts</Link><h1 className="mt-3 text-3xl">Supplier not found</h1></main>;
+  if (!sup) return <main className="page py-8"><Link to="/contracts" className="underline">Contracts</Link><h1 className="mt-3 text-3xl">Supplier not found</h1></main>;
 
   const docs = withFiled(snap.addedDocs).filter((d) => d.sup === id && d.filed !== false);
   const waiting = DOCS.filter((d) => d.sup === id && d.filed === false && !snap.addedDocs[d.id] && !snap.rejectedDocs[d.id]);
@@ -68,7 +68,7 @@ export default function Supplier() {
   };
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="page py-8">
       <nav className="text-sm"><Link to="/contracts" className="underline">Contracts</Link> / {sup.short}</nav>
       <h1 className="mt-3 text-3xl md:text-4xl">{sup.name}</h1>
       <p className="mt-1 text-[var(--muted)]">{sup.category}. Owner: {sup.owner}. Modelled on Law Insider type: {sup.lawInsiderType}.</p>

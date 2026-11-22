@@ -9,7 +9,7 @@ export default function GapPicture() {
   const contract = contractRate(), invoice = invoiceRate(), over = invoice - contract;
   const pct = (n: number) => `${(n / invoice) * 100}%`;
   return (
-    <figure className="mt-6 max-w-3xl" aria-label={`Contract says ${inr(contract)} per hour. Invoice says ${inr(invoice)} per hour.`}>
+    <figure className="max-w-3xl" aria-label={`Contract says ${inr(contract)} per hour. Invoice says ${inr(invoice)} per hour.`}>
       <div className="space-y-3">
         <div>
           <div className="text-sm mb-1 num">Contract says {inr(contract)}/hr</div>

@@ -4,6 +4,8 @@ import { inr } from "../lib/engine";
 import { breakdown, gstAdjustment, STAGES, valueItems, valueTotals, type Stage, type ValueItem } from "../lib/ledger";
 import { useStore } from "../lib/store";
 import Label from "../components/Label";
+import FilesBar from "../components/FilesBar";
+import { valueFile } from "../lib/dataFiles";
 
 const WHAT: Record<string, string> = {
   A: `Finance records credit note ${CREDIT_NOTE_NO}`,
@@ -34,10 +36,10 @@ export default function Value() {
   const dec = december(snap);
   const seen = !!snap.done.A11;
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="page py-8">
       <h1 className="text-3xl md:text-4xl">Value</h1>
 
-      <section className="mt-6" aria-labelledby="conf">
+      <section className="mt-6" aria-labelledby="conf" data-tour="value-big">
         <h2 id="conf" className="text-lg font-semibold">Confirmed value <Label kind="calculated" /></h2>
         <div className="mt-2 flex flex-wrap gap-x-10 gap-y-2">
           <p><span className="font-display text-4xl font-bold num">{inr(t.confirmedOneOff)}</span> <span className="text-[var(--muted)]">one-off</span></p>
@@ -113,6 +115,7 @@ export default function Value() {
         <p className="mt-2 num">TalentBridge credit: {inr(gstAdjustment(snap))} {snap.done.A9 ? "recorded with the credit note" : "will follow the credit note"}. <Label kind="calculated" /></p>
         <p className="mt-1 text-sm text-[var(--muted)]">GST moves with the base amount. It is reported here and never added to Confirmed value.</p>
       </section>
+      <FilesBar files={[valueFile(snap)]} />
     </main>
   );
 }

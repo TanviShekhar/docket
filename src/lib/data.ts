@@ -8,22 +8,22 @@ export const BUYER = "Larkspur Technologies Pvt Ltd"; // the fictional company u
 
 export type Role = "finance" | "legal" | "procurement" | "owner" | "supplier";
 export const PEOPLE: Record<Role, { name: string; title: string }> = {
-  finance: { name: "Priya Nair", title: "Accounts Payable, Finance" },
-  legal: { name: "Aditya Rao", title: "Commercial Legal" },
-  procurement: { name: "Meera Iyer", title: "Procurement" },
-  owner: { name: "Arjun Mehta", title: "Head of Customer Support (owns CloudDesk)" },
-  supplier: { name: "Sunil Das", title: "Billing, TalentBridge Staffing" },
+  finance: { name: "Ritika Deshmukh", title: "Accounts Payable, Finance" },
+  legal: { name: "Rushikesh Kulkarni", title: "Commercial Legal" },
+  procurement: { name: "Yash Patil", title: "Procurement" },
+  owner: { name: "Anuj Shinde", title: "Head of Customer Support (owns CloudDesk)" },
+  supplier: { name: "Udit Pawar", title: "Billing, TalentBridge Staffing" },
 };
 
 export interface Supplier { id: string; name: string; short: string; category: string; owner: string; lawInsiderType: string }
 export const SUPPLIERS: Supplier[] = [
-  { id: "TB", name: "TalentBridge Staffing Pvt Ltd", short: "TalentBridge", category: "Staffing", owner: "Ritika Menon (Engineering)", lawInsiderType: "Service Agreement + Statement of Work" },
-  { id: "CD", name: "CloudDesk Software Pvt Ltd", short: "CloudDesk", category: "Software subscription", owner: "Arjun Mehta (Customer Support)", lawInsiderType: "Subscription Agreement" },
-  { id: "SH", name: "SwiftHaul Logistics Ltd", short: "SwiftHaul", category: "Logistics", owner: "Neha Kulkarni (Supply Chain)", lawInsiderType: "Services Agreement" },
-  { id: "PF", name: "PrimeFacility Services LLP", short: "PrimeFacility", category: "Facilities", owner: "Vikram Shah (Admin)", lawInsiderType: "Services Agreement" },
-  { id: "BL", name: "Brightline Marketing Pvt Ltd", short: "Brightline", category: "Marketing agency", owner: "Sana Iqbal (Marketing)", lawInsiderType: "Service Agreement" },
-  { id: "MR", name: "Meridian IT Consulting Pvt Ltd", short: "Meridian", category: "IT consulting", owner: "Karan Bhatia (IT)", lawInsiderType: "Consulting Agreement" },
-  { id: "ZE", name: "Zenith Events Pvt Ltd", short: "Zenith Events", category: "Events", owner: "Rohan Pillai (HR)", lawInsiderType: "Services Agreement" },
+  { id: "TB", name: "TalentBridge Staffing Pvt Ltd", short: "TalentBridge", category: "Staffing", owner: "Tejas Wagh (Engineering)", lawInsiderType: "Service Agreement + Statement of Work" },
+  { id: "CD", name: "CloudDesk Software Pvt Ltd", short: "CloudDesk", category: "Software subscription", owner: "Anuj Shinde (Customer Support)", lawInsiderType: "Subscription Agreement" },
+  { id: "SH", name: "SwiftHaul Logistics Ltd", short: "SwiftHaul", category: "Logistics", owner: "Mansi Rane (Supply Chain)", lawInsiderType: "Services Agreement" },
+  { id: "PF", name: "PrimeFacility Services LLP", short: "PrimeFacility", category: "Facilities", owner: "Omkar Salvi (Admin)", lawInsiderType: "Services Agreement" },
+  { id: "BL", name: "Brightline Marketing Pvt Ltd", short: "Brightline", category: "Marketing agency", owner: "Amruta Sawant (Marketing)", lawInsiderType: "Service Agreement" },
+  { id: "MR", name: "Meridian IT Consulting Pvt Ltd", short: "Meridian", category: "IT consulting", owner: "Siddharth Naik (IT)", lawInsiderType: "Consulting Agreement" },
+  { id: "ZE", name: "Zenith Events Pvt Ltd", short: "Zenith Events", category: "Events", owner: "Kunal Chavan (HR)", lawInsiderType: "Services Agreement" },
 ];
 
 export type Exec = "signed" | "unsigned";
@@ -43,7 +43,7 @@ export const DOCS: Doc[] = [
       { ref: "6.4", page: 5, text: "Travel and out-of-pocket expenses are reimbursable at cost only where approved in writing by the Customer before they are incurred." },
       { ref: "14.2", page: 9, text: "In the event of conflict, a Statement of Work prevails over this Agreement for its own scope, and an Amendment prevails only over the provisions it expressly amends." },
     ] },
-  { id: "TB-SOW1", sup: "TB", type: "SOW", title: "SOW-1: Customer platform rebuild", signed: "2026-02-15", effective: "2026-02-15", expiry: "2027-02-14", exec: "signed", parent: "TB-MSA", scope: "SOW-1", po: "4500012345", signedBy: "Both parties", source: "Email attachment from Ritika Menon, 16 Feb 2026",
+  { id: "TB-SOW1", sup: "TB", type: "SOW", title: "SOW-1: Customer platform rebuild", signed: "2026-02-15", effective: "2026-02-15", expiry: "2027-02-14", exec: "signed", parent: "TB-MSA", scope: "SOW-1", po: "4500012345", signedBy: "Both parties", source: "Email attachment from Tejas Wagh, 16 Feb 2026",
     clauses: [ { ref: "3", page: 2, text: "Resources: six (6) Senior Developers and two (2) Business Analysts, billed monthly in arrears against approved timesheets under PO 4500012345." } ] },
   { id: "TB-SOW2", sup: "TB", type: "SOW", title: "SOW-2: Data platform migration", signed: "2026-09-01", effective: "2026-09-01", expiry: "2026-12-31", exec: "signed", parent: "TB-MSA", scope: "SOW-2", po: "4500013310", signedBy: "Both parties", source: "E-signature envelope ES-55120",
     clauses: [ { ref: "3", page: 2, text: "Resources: one (1) Senior Developer at the Schedule 2 rate, billed monthly in arrears under PO 4500013310." } ] },
@@ -75,9 +75,9 @@ export const DOCS: Doc[] = [
       { ref: "12.1", page: 9, text: "Fees may increase on each anniversary by no more than four percent (4%)." },
     ] },
   // Shadow contracts: found outside Docket, not filed until Legal adds them
-  { id: "BL-SL1", sup: "BL", type: "Side letter", title: "Side letter: Q4 retainer discount", signed: "2026-09-30", effective: "2026-10-01", expiry: "2026-12-31", exec: "signed", parent: "BL-RET", scope: "All", signedBy: "Both parties", source: "Found in Sana Iqbal's email: Brightline_side_letter_signed.pdf, 30 Sep 2026", filed: false,
+  { id: "BL-SL1", sup: "BL", type: "Side letter", title: "Side letter: Q4 retainer discount", signed: "2026-09-30", effective: "2026-10-01", expiry: "2026-12-31", exec: "signed", parent: "BL-RET", scope: "All", signedBy: "Both parties", source: "Found in Amruta Sawant's email: Brightline_side_letter_signed.pdf, 30 Sep 2026", filed: false,
     clauses: [ { ref: "1", page: 1, text: "For October, November and December 2026, the monthly retainer fee is reduced by ten percent (10%) to INR 15,75,000, exclusive of GST." } ] },
-  { id: "ZE-Q", sup: "ZE", type: "Signed quote", title: "Signed quote: 2026 offsites and events", signed: "2026-02-10", effective: "2026-02-10", expiry: "2026-12-31", exec: "signed", parent: null, scope: "All", signedBy: "Both parties", source: "Found in a personal folder: /Users/rpillai/Events/Zenith_quote_signed.pdf", filed: false,
+  { id: "ZE-Q", sup: "ZE", type: "Signed quote", title: "Signed quote: 2026 offsites and events", signed: "2026-02-10", effective: "2026-02-10", expiry: "2026-12-31", exec: "signed", parent: null, scope: "All", signedBy: "Both parties", source: "Found in a personal folder: /Users/kchavan/Events/Zenith_quote_signed.pdf", filed: false,
     clauses: [ { ref: "1", page: 1, text: "Zenith Events will manage three company offsites in 2026 at INR 2,80,000 per event, exclusive of GST, payable within 30 days of each event." } ] },
 ];
 
@@ -89,18 +89,18 @@ export interface Term {
   by?: string; at?: string; why?: string; to?: string; // to = last date the term applies
 }
 export const TERMS: Term[] = [
-  { id: "t1", sup: "TB", key: "rate:Senior Developer", label: "Senior Developer rate", value: 2400, unit: "INR/hr", doc: "TB-MSA", ref: "Sch 2", scope: "All SOWs", from: "2026-01-01", conf: 0.97, state: "verified", by: "Aditya Rao", at: "2026-01-05" },
-  { id: "t2", sup: "TB", key: "rate:Business Analyst", label: "Business Analyst rate", value: 1800, unit: "INR/hr", doc: "TB-MSA", ref: "Sch 2", scope: "All SOWs", from: "2026-01-01", conf: 0.97, state: "verified", by: "Aditya Rao", at: "2026-01-05" },
+  { id: "t1", sup: "TB", key: "rate:Senior Developer", label: "Senior Developer rate", value: 2400, unit: "INR/hr", doc: "TB-MSA", ref: "Sch 2", scope: "All SOWs", from: "2026-01-01", conf: 0.97, state: "verified", by: "Rushikesh Kulkarni", at: "2026-01-05" },
+  { id: "t2", sup: "TB", key: "rate:Business Analyst", label: "Business Analyst rate", value: 1800, unit: "INR/hr", doc: "TB-MSA", ref: "Sch 2", scope: "All SOWs", from: "2026-01-01", conf: 0.97, state: "verified", by: "Rushikesh Kulkarni", at: "2026-01-05" },
   { id: "t3", sup: "TB", key: "rate:Senior Developer", label: "Senior Developer rate", value: 2000, unit: "INR/hr", doc: "TB-AMD1", ref: "1", scope: "SOW-1", from: "2026-09-01", conf: 0.91, state: "unverified" },
   { id: "t4", sup: "TB", key: "rate:Senior Developer", label: "Senior Developer rate", value: 2200, unit: "INR/hr", doc: "TB-AMD2", ref: "1", scope: "SOW-1", from: "2026-10-01", conf: 0.94, state: "unverified" },
-  { id: "t5", sup: "TB", key: "expenses", label: "Expenses rule", value: "Prior written approval", unit: "", doc: "TB-MSA", ref: "6.4", scope: "All SOWs", from: "2026-01-01", conf: 0.95, state: "verified", by: "Aditya Rao", at: "2026-01-05" },
+  { id: "t5", sup: "TB", key: "expenses", label: "Expenses rule", value: "Prior written approval", unit: "", doc: "TB-MSA", ref: "6.4", scope: "All SOWs", from: "2026-01-01", conf: 0.95, state: "verified", by: "Rushikesh Kulkarni", at: "2026-01-05" },
   { id: "t6", sup: "CD", key: "cap", label: "Renewal price cap", value: 5, unit: "%", doc: "CD-SUB", ref: "9.2", scope: "All", from: "2025-02-06", conf: 0.88, state: "ambiguous", why: "The cap has an exception for changes in law or regulation. Legal must decide whether it applies." },
-  { id: "t7", sup: "CD", key: "notice", label: "Non-renewal notice", value: 60, unit: "days before term end, received", doc: "CD-SUB", ref: "9.1", scope: "All", from: "2025-02-06", conf: 0.96, state: "verified", by: "Aditya Rao", at: "2025-02-02" },
+  { id: "t7", sup: "CD", key: "notice", label: "Non-renewal notice", value: 60, unit: "days before term end, received", doc: "CD-SUB", ref: "9.1", scope: "All", from: "2025-02-06", conf: 0.96, state: "verified", by: "Rushikesh Kulkarni", at: "2025-02-02" },
   { id: "t8", sup: "SH", key: "sla", label: "On-time delivery SLA and credit", value: "95% target, 2% per full point, cap 10%", unit: "", doc: "SH-MSA", ref: "7.1 to 7.4", scope: "All", from: "2025-09-01", conf: 0.9, state: "unverified" },
   { id: "t9", sup: "PF", key: "sla", label: "Maintenance response SLA", value: "\"prompt response\"", unit: "", doc: "PF-AGR", ref: "8.2", scope: "All", from: "2025-04-01", conf: 0.93, state: "not-measurable", why: "The clause gives no time limit or way to measure it, so no credit can be calculated. Legal should review." },
-  { id: "t10", sup: "BL", key: "fee", label: "Monthly retainer", value: 1750000, unit: "INR/month", doc: "BL-RET", ref: "3.1", scope: "All", from: "2026-03-01", conf: 0.98, state: "verified", by: "Aditya Rao", at: "2026-03-04" },
-  { id: "t11", sup: "MR", key: "cap", label: "Anniversary price cap", value: 4, unit: "%", doc: "MR-MSA", ref: "12.1", scope: "All", from: "2025-11-10", conf: 0.95, state: "verified", by: "Aditya Rao", at: "2025-11-20" },
-  { id: "t12", sup: "MR", key: "obligation", label: "SOC 2 Type II report due", value: "31 March each year", unit: "", doc: "MR-MSA", ref: "11.2", scope: "All", from: "2025-11-10", conf: 0.92, state: "verified", by: "Aditya Rao", at: "2025-11-20" },
+  { id: "t10", sup: "BL", key: "fee", label: "Monthly retainer", value: 1750000, unit: "INR/month", doc: "BL-RET", ref: "3.1", scope: "All", from: "2026-03-01", conf: 0.98, state: "verified", by: "Rushikesh Kulkarni", at: "2026-03-04" },
+  { id: "t11", sup: "MR", key: "cap", label: "Anniversary price cap", value: 4, unit: "%", doc: "MR-MSA", ref: "12.1", scope: "All", from: "2025-11-10", conf: 0.95, state: "verified", by: "Rushikesh Kulkarni", at: "2025-11-20" },
+  { id: "t12", sup: "MR", key: "obligation", label: "SOC 2 Type II report due", value: "31 March each year", unit: "", doc: "MR-MSA", ref: "11.2", scope: "All", from: "2025-11-10", conf: 0.92, state: "verified", by: "Rushikesh Kulkarni", at: "2025-11-20" },
   { id: "t13", sup: "BL", key: "fee", label: "Monthly retainer (Q4 discount)", value: 1575000, unit: "INR/month", doc: "BL-SL1", ref: "1", scope: "All", from: "2026-10-01", to: "2026-12-31", conf: 0.95, state: "unverified" },
   { id: "t14", sup: "ZE", key: "fee", label: "Fee per event", value: 280000, unit: "INR/event", doc: "ZE-Q", ref: "1", scope: "All", from: "2026-02-10", to: "2026-12-31", conf: 0.94, state: "unverified" },
 ];
@@ -114,7 +114,7 @@ export const INVOICES: Invoice[] = [
       { id: "L1", desc: "Senior Developer", sow: "SOW-1", from: "2026-10-01", to: "2026-10-31", qty: 800, rate: 2400, kind: "labour" },
       { id: "L2", desc: "Senior Developer (late-billed)", sow: "SOW-1", from: "2026-09-16", to: "2026-09-30", qty: 120, rate: 2400, kind: "labour", role: "Senior Developer" },
       { id: "L3", desc: "Business Analyst", sow: "SOW-1", from: "2026-10-01", to: "2026-10-31", qty: 320, rate: 1800, kind: "labour" },
-      { id: "L4", desc: "Technical Consultant", sow: "SOW-1", from: "2026-10-01", to: "2026-10-31", qty: 160, rate: 2400, kind: "labour", suggest: { role: "Senior Developer", conf: 0.82, why: "\"Technical Consultant\" is not on the rate card. The approved timesheet lists this person (R. Kapoor) as Senior Developer, and SOW-1 has no Technical Consultant role." } },
+      { id: "L4", desc: "Technical Consultant", sow: "SOW-1", from: "2026-10-01", to: "2026-10-31", qty: 160, rate: 2400, kind: "labour", suggest: { role: "Senior Developer", conf: 0.82, why: "\"Technical Consultant\" is not on the rate card. The approved timesheet lists this person (R. Jadhav) as Senior Developer, and SOW-1 has no Technical Consultant role." } },
       { id: "L5", desc: "Senior Developer", sow: "SOW-2", from: "2026-10-01", to: "2026-10-31", qty: 160, rate: 2400, kind: "labour" },
       { id: "L6", desc: "Travel: client site visit, Pune", sow: "SOW-1", from: "2026-10-14", to: "2026-10-15", qty: 1, rate: 12000, kind: "expense" },
     ] },
@@ -200,9 +200,9 @@ export const SPEND_2026: Spend[] = [
 
 // ---------- Reminders and escalation (approvals stall) ----------
 export const DELEGATES: Record<Role, { name: string; title: string }> = {
-  finance: { name: "Rahul Gupta", title: "AP Lead" },
-  legal: { name: "Nisha Verma", title: "Legal Counsel" },
-  procurement: { name: "Sameer Joshi", title: "Procurement Lead" },
-  owner: { name: "Kavya Sen", title: "Support Operations Manager" },
+  finance: { name: "Sagar More", title: "AP Lead" },
+  legal: { name: "Pooja Gaikwad", title: "Legal Counsel" },
+  procurement: { name: "Nikhil Bhandari", title: "Procurement Lead" },
+  owner: { name: "Sneha Bhosale", title: "Support Operations Manager" },
   supplier: { name: "TalentBridge account manager", title: "Supplier side" },
 };

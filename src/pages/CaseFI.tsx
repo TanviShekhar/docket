@@ -153,7 +153,7 @@ function Brightline() {
   return (
     <ItemFrame caseId="I" crumb="Brightline side letter" status={`Next retainer invoice about ${dmy("2026-12-01").replace(" 2026", "")}.`}
       title="Docket found a signed Brightline side letter that is not in the contract family."
-      what={<p>The letter was found in Sana Iqbal's email. It was signed by both parties on {dmy(doc.signed!)} and gives {inr(f.gap)} a month off the retainer for October to December. Without it Larkspur would pay {inr(f.gap)} a month too much for the rest of the quarter.</p>}
+      what={<p>The letter was found in Amruta Sawant's email. It was signed by both parties on {dmy(doc.signed!)} and gives {inr(f.gap)} a month off the retainer for October to December. Without it Larkspur would pay {inr(f.gap)} a month too much for the rest of the quarter.</p>}
       proof={<div className="space-y-3">
         <div className="grid gap-3 sm:grid-cols-2">
           <ProofCard title="Side letter says"><Quote text={c.text} from={`Side letter, page ${c.page}, clause ${c.ref}. ${doc.source}`} />

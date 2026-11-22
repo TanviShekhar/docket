@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 
-// A small pill that points at a numbered assumption in the Case study.
-export default function AssumptionChip({ code, className = "" }: { code: string; className?: string }) {
+// A small amber pill that points at a numbered assumption in the Case study.
+export default function AssumptionChip({ code }: { code: string }) {
   return (
-    <Link to={`/case-study?to=assumptions`} title={`Assumption ${code}. Tap to read it.`}
-      className={`inline-flex items-center rounded-full border border-current px-2 text-xs ${className}`}>{code}</Link>
+    <Link to="/case-study?to=assumptions" title={`Assumption ${code}: we assumed this to build the prototype. Tap to read it.`} className="chip-assume">
+      {code}
+    </Link>
   );
 }

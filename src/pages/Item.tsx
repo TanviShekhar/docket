@@ -16,7 +16,7 @@ export default function Item() {
   if (/^(F|G|H|I[12])$/.test(id)) return <CaseFI id={id} />;
   const card = allCards(snap).find((c) => c.id === id);
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
+    <main className="page py-8">
       <Link to="/" className="text-sm underline">To-do</Link>
       <h1 className="mt-3 text-3xl">{card ? card.headline : "This item is not open"}</h1>
       <p className="mt-4 text-[var(--muted)]">{card ? `This step is for ${ROLE_NAME[card.owner]}. Its page is built in a later step.` : "Nothing is waiting here right now."}</p>

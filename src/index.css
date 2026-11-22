@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light dark; --bg: #ffffff; --text: #101828; --line: #e4e7ee; --muted: #667085; --bar: #0b1f4b; }
+:root { color-scheme: light dark; --bg: #ffffff; --text: #101828; --line: #e4e7ee; --muted: #667085; --bar: #0b1f4b; --tour: #1e3f9a; --panel: #f7f8fb; }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #0a1430; --text: #e8ecf6; --line: #22305a; --muted: #9aa6c4; --bar: #5b7bd5; }
+  :root { --bg: #0a1430; --text: #e8ecf6; --line: #22305a; --muted: #9aa6c4; --bar: #5b7bd5; --tour: #8fa3e0; --panel: #0e1a3d; }
   /* Status colours lightened so text stays above 4.5:1 on the dark page. */
   .text-ok { color: #5eead4; }
   .text-gap { color: #ff7aa8; }
@@ -23,3 +23,31 @@ td.num, th.num { white-space: nowrap; } /* rupee amounts in tables never wrap */
 .bg-bar { background-color: var(--bar); }
 :focus-visible { outline: 2px solid #d4145a; outline-offset: 2px; }
 @media (prefers-color-scheme: dark) { :focus-visible { outline-color: #ff7aa8; } }
+
+/* Pages use the whole screen, with side padding that grows on wide monitors. */
+.page { width: 100%; max-width: 1760px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+@media (min-width: 640px) { .page { padding-left: 1.5rem; padding-right: 1.5rem; } }
+@media (min-width: 1024px) { .page { padding-left: 2.5rem; padding-right: 2.5rem; } }
+.panel { border: 1px solid var(--line); border-radius: 12px; padding: 0.75rem 1rem; background: var(--panel); }
+
+/* Item pages: one column on phones, two on laptops (what to do on the left, the proof on the right). */
+.item-grid { display: grid; gap: 1.75rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1024px) {
+  .item-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); column-gap: 2.5rem; row-gap: 1.5rem; align-items: start; }
+  .ig-what { grid-column: 1; grid-row: 1; }
+  .ig-action { grid-column: 1; grid-row: 2; }
+  .ig-files { grid-column: 1; grid-row: 3; }
+  .ig-proof { grid-column: 2; grid-row: 1 / span 2; }
+  .ig-how { grid-column: 2; grid-row: 3; }
+  .ig-history { grid-column: 1 / -1; grid-row: 4; }
+}
+
+/* Assumption chips (A1 to A10) have their own colour so they never look like a status or a money gap. */
+.chip-assume { display: inline-flex; align-items: center; border-radius: 9999px; padding: 0 0.5rem; font-size: 0.75rem; font-weight: 600; background: #fdf0d2; color: #6b3f06; border: 1px solid #e0a63a; }
+@media (prefers-color-scheme: dark) { .chip-assume { background: #4a3410; color: #ffd98a; border-color: #b8892f; } }
+
+/* Guided tour: the docked guide leaves room on the right of the page on laptops. */
+@media (min-width: 1024px) { .tour-pad { padding-right: 23rem; } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+.prose-wide p, .prose-wide li { max-width: 100ch; }

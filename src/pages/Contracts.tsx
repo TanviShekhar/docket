@@ -7,6 +7,8 @@ import { checkStateOf } from "../lib/ledger";
 import { useStore } from "../lib/store";
 import Label from "../components/Label";
 import ReadContract from "../components/ReadContract";
+import FilesBar from "../components/FilesBar";
+import { contractsFile } from "../lib/dataFiles";
 
 const ITEM_FOR_DOC: Record<string, string> = { "TB-MSA": "/item/F", "TB-AMD2": "/item/A1", "CD-SUB": "/item/B1", "SH-MSA": "/item/C1", "PF-AGR": "/item/D", "BL-SL1": "/item/I1", "ZE-Q": "/item/I2" };
 
@@ -51,7 +53,7 @@ export default function Contracts() {
   const field = "min-h-[44px] border border-[var(--line)] rounded-lg px-2 bg-transparent";
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="page py-8">
       <h1 className="text-3xl md:text-4xl">Contracts</h1>
       <p className="mt-2 text-[var(--muted)] max-w-3xl">Every contract Docket has found, where it came from, and what it says. Nothing here is typed by hand: counts and answers are worked out from the documents.</p>
 
@@ -182,6 +184,7 @@ export default function Contracts() {
           </table>
         </div>
       </section>
+      <FilesBar files={[contractsFile(snap)]} />
     </main>
   );
 }

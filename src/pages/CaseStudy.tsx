@@ -35,12 +35,12 @@ export default function CaseStudy() {
   return (
     <main className="pb-10">
       <nav aria-label="Case study sections" className="sticky top-0 z-10 bg-[var(--bg)] border-b border-[var(--line)]">
-        <ul className="mx-auto max-w-4xl px-4 flex gap-1 overflow-x-auto text-sm">
+        <ul className="page flex gap-1 overflow-x-auto text-sm">
           {NAV.map(([id, label]) => <li key={id} className="shrink-0"><button type="button" onClick={() => go(id)} className="min-h-[44px] px-3 hover:underline">{label}</button></li>)}
         </ul>
       </nav>
 
-      <article className="mx-auto max-w-4xl px-4 py-8 space-y-4 leading-relaxed">
+      <article className="page py-8 space-y-4 leading-relaxed prose-wide">
         <h1 className="text-3xl md:text-4xl">Clause &amp; Effect: why Docket checks contracts after signature</h1>
         <p className="text-lg">Docket checks that suppliers charge and deliver what the contract promised, and helps people recover the money when they don't.</p>
         <p>Docket is a post-signature contract intelligence layer for Procurement and Finance. It does not claim to invent the category; contract management platforms already work after signature. Its focus is narrow and deep: work out which signed terms actually apply, then check real activity against them.</p>
